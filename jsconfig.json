@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "baseUrl": "./public/src/main",
+        "paths": {
+          "components": ["./components"],
+          "utils": ["./utils"],
+          "constants": ["./constants"],
+          "icons": ["./icons"],
+          "reducers": ["./reducers"],
+          "services": ["./services"],
+          "assets": ["../assets"]
+        }
+    }
+}
