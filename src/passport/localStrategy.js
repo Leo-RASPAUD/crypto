@@ -1,11 +1,7 @@
 const LocalStrategy = require('passport-local');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User/User');
-
-const authentication = {
-    jwtSecret: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzaXRlIjoiY3J5cHRvIiwiY3JlYXRvciI6Imxlb3Jhc3BhdWQiLCJqdGkiOiJjODc0YTUzYi0yNDMwLTRkNzQtYjE3ZC00NDhjZmZjYzZiODciLCJpYXQiOjE1MTU3NDk4ODUsImV4cCI6MTUxNTc1MzQ4NX0.QF5uyOEenBqVyi-vfCFPtzfYyx_wJMPDApcJCdJ6WBw',
-    issuer: 'crypto',
-};
+const conf = require('../../conf/conf');
 
 module.exports = new LocalStrategy({ usernameField: 'email', passwordField: 'password' }, (email, password, done) =>
     User.findOne({ email })
@@ -21,13 +17,17 @@ module.exports = new LocalStrategy({ usernameField: 'email', passwordField: 'pas
                                 sub: user.id,
                                 iat: Math.floor(Date.now() / 1000) - 30,
                             },
-                            authentication.jwtSecret,
+                            conf.authentication.jwtSecret,
                             {
-                                issuer: 'crypto',
+                                issuer: conf.authentication.issuer,
                                 algorithm: 'HS256',
                             },
                         );
-                        return done(null, user);
+                        return done(null, {
+                            id: user.id,
+                            email: user.email,
+                            token,
+                        });
                     }
                     return done(null, false, { password: 'Incorrect password' });
                 });

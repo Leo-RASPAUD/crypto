@@ -4,12 +4,12 @@ const User = require('../models/User/User');
 const createUser = async (req, res) => {
     const { email, password } = req.body;
     const user = new User({ email, password });
-    
+
     let newUser;
     try {
         newUser = await user.save();
         return res.json(newUser);
-    } catch(error) {
+    } catch (error) {
         if (error.code === 11000) {
             console.log(`User with email ${email} already exists`);
             return res.status(400).json({ email: 'User already existing' });
@@ -29,9 +29,8 @@ const login = (req, res, next) => {
         }
         return req.logIn(user, (loginErr) => {
             if (loginErr) {
-                return next(loginErr);0
+                return next(loginErr);
             }
-            console.log(user);
             return res.json({
                 id: user.id,
                 email: user.email,
@@ -44,4 +43,4 @@ const login = (req, res, next) => {
 module.exports = {
     createUser,
     login,
-}
+};
