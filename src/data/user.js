@@ -1,9 +1,37 @@
 const passport = require('passport');
 const User = require('../models/User/User');
 
+const listUsers = async (req, res) => {
+    let users;
+    try {
+        users = await User.find({});
+        return res.send(users);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ _error: `Error code : ${error.code}` });
+    }
+};
+
+const addExchange = async (req, res) => {
+    try {
+        await User.findByIdAndUpdate(
+            { _id: req.user.id },
+            { $push: { exchanges: { name: req.body.name, apiKey: req.body.apiKey, apiSecret: req.body.apiSecret } } },
+            { safe: true, upsert: true },
+        );
+        const user = await User.findById(req.user.id);
+        return res.send(user);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ _error: `Error code : ${error.code}` });
+    }
+};
+
+
 const createUser = async (req, res) => {
     const { email, password } = req.body;
     const user = new User({ email, password });
+    console.log(email, password);
 
     let newUser;
     try {
@@ -41,6 +69,8 @@ const login = (req, res, next) => {
 };
 
 module.exports = {
+    addExchange,
     createUser,
+    listUsers,
     login,
 };

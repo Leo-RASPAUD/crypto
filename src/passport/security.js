@@ -14,16 +14,15 @@ passport.deserializeUser((token, callback) => {
             { issuer: conf.authentication.issuer },
         );
 
-        return User.findById(payload.sub)
-            .then((user) => {
-                callback(
-                    null,
-                    {
-                        id: user._id,
-                        email: user.email,
-                    },
-                );
+        return User.findById(payload.sub).then((user) => {
+            if (!user) {
+                callback(null, false);
+            }
+            callback(null, {
+                id: user._id,
+                email: user.email,
             });
+        });
     } catch (e) {
         return callback(e);
     }

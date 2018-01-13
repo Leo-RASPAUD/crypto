@@ -9,7 +9,11 @@ const userSchema = new mongoose.Schema({
         index: { unique: true },
     },
     password: { type: String, required: true },
-    apiKeys: [],
+    exchanges: [{
+        apiKey: String,
+        apiSecret: String,
+        name: String,
+    }],
 });
 
 userSchema.pre('save', userModelUtils.preSave);

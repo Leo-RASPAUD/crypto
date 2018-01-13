@@ -11,7 +11,9 @@ const cookieParser = require('cookie-parser');
 const security = require('./src/passport/security');
 const localStrategy = require('./src/passport/localStrategy');
 const userEndpoints = require('./src/data/user');
+const exchangesEndpoints = require('./src/data/exchanges');
 const conf = require('./conf/conf');
+const exchangesHandler = require('./src/handlers/exchanges');
 
 const app = express();
 const PORT = process.env.PORT || 8085;
@@ -47,13 +49,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Endpoints
-app.post('/createUser', userEndpoints.createUser);
+app.post('/user/createUser', userEndpoints.createUser);
+app.get('/user', security.isAuthenticated, userEndpoints.listUsers);
+app.post('/user/addExchange', security.isAuthenticated, userEndpoints.addExchange);
 app.post('/login', userEndpoints.login);
-app.get('/user', security.isAuthenticated, (req, res) => {
-    console.log(req.user);
-    res.send(200);
-});
+app.get('/exchanges', security.isAuthenticated, exchangesEndpoints.list);
 
 app.listen(PORT, async () => {
+    exchangesHandler.getData();
     console.log(`Backend runing on port : ${PORT}`);
 });
