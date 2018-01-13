@@ -28,7 +28,7 @@ const mongoStore = new MongooseStore({ connection: mongoose });
 mongoose.Promise = global.Promise;
 
 app.use(cors({
-    origin: 'localhost:8082',
+    origin: 'http://localhost:8082',
     credentials: true,
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -52,7 +52,7 @@ app.use(passport.session());
 app.post('/user/createUser', userEndpoints.createUser);
 app.get('/user', security.isAuthenticated, userEndpoints.listUsers);
 app.post('/user/addExchange', security.isAuthenticated, userEndpoints.addExchange);
-app.post('/login', userEndpoints.login);
+app.post('/user/login', userEndpoints.login);
 app.get('/exchanges', security.isAuthenticated, exchangesEndpoints.list);
 app.get('/exchanges/:name', security.isAuthenticated, exchangesEndpoints.getExchangePrices);
 

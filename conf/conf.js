@@ -4,6 +4,18 @@ const authentication = {
     sessionSecret: 'QpoXwHS3kiCd549CxhWYtTKXMcpM88NP849nwcWD',
 };
 
+const exposeApiParams = (app, params) => {
+    app.get('/getApiParams', (_, res) => {
+        res.send(params);
+    });
+};
+
+
 module.exports = {
     authentication,
+    params: {
+        host: process.env.API_HOST || 'localhost:8085',
+        port: process.env.PORT || 8082,
+    },
+    exposeApiParams,
 };

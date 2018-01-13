@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import paths from 'components/App/App.paths';
 import Home from 'components/Home/Home.container';
+import Dashboard from 'components/Dashboard/Dashboard.container';
 
 class App extends React.Component {
     render() {
@@ -9,6 +10,7 @@ class App extends React.Component {
             <div>
                 <Switch>
                     <Route exact path={paths.public.home} render={() => <Home />} />
+                    <Route exact path={paths.authenticated.dashboard.home} render={() => <Dashboard />} />
                     <Redirect to={paths.public.home} />
                 </Switch>
             </div>

@@ -1,0 +1,5 @@
+const REQUEST_SUBMIT_LOGIN = 'REQUEST_SUBMIT_LOGIN';
+
+export default {
+    REQUEST_SUBMIT_LOGIN,
+};

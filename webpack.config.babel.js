@@ -1,5 +1,6 @@
 import path from 'path';
 import webpackRules from './Webpack/webpackRules';
+import configServer from './conf/conf';
 
 const config = {
     resolve: {
@@ -7,6 +8,8 @@ const config = {
             components: path.resolve(__dirname, './src/public/main/components'),
             reducers: path.resolve(__dirname, './src/public/main/reducers'),
             services: path.resolve(__dirname, './src/public/main/services'),
+            utils: path.resolve(__dirname, './src/public/main/utils'),
+            constants: path.resolve(__dirname, './src/public/main/constants'),
         },
         extensions: ['.js'],
         modules: [
@@ -27,6 +30,9 @@ const config = {
         port: 8082,
         contentBase: path.resolve(__dirname, './src/public'),
         public: 'localhost:8082',
+        before: (app) => {
+            configServer.exposeApiParams(app, configServer.params);
+        },
         historyApiFallback: true,
     },
 

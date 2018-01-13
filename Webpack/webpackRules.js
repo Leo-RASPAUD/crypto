@@ -4,8 +4,16 @@ const babelLoaderRule = {
     use: [{
         loader: 'babel-loader',
         options: {
-            presets: ['env', 'react'],
-            plugins: ['babel-plugin-transform-object-rest-spread'],
+            presets: ['env', 'react', 'stage-0'],
+            plugins: [
+                'babel-plugin-transform-object-rest-spread',
+                'transform-decorators-legacy',
+                [
+                    'transform-runtime', {
+                        regenerator: true,
+                    },
+                ],
+            ],
         },
     }],
 };
