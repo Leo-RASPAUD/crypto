@@ -54,6 +54,7 @@ app.get('/user', security.isAuthenticated, userEndpoints.listUsers);
 app.post('/user/addExchange', security.isAuthenticated, userEndpoints.addExchange);
 app.post('/login', userEndpoints.login);
 app.get('/exchanges', security.isAuthenticated, exchangesEndpoints.list);
+app.get('/exchanges/:name', security.isAuthenticated, exchangesEndpoints.getExchangePrices);
 
 app.listen(PORT, async () => {
     exchangesHandler.getData();

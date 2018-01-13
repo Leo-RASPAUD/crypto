@@ -29,7 +29,7 @@
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.1.0",
     "material-ui": "^1.0.0-beta.27",
-    "mongoose": "^4.13.9",
+    "mongoose": "^5.0.0-rc2",
     "mongoose-express-session": "^0.0.5",
     "nodemon": "^1.14.11",
     "passport": "^0.4.0",
