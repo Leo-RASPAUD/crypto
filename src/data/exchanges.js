@@ -11,7 +11,7 @@ const list = async (req, res) => {
     }
 };
 
-const getExchangePrices = async (req, res) => {
+const getSymbols = async (req, res) => {
     let exchange;
     const exchangeName = req.params.name;
     try {
@@ -25,5 +25,5 @@ const getExchangePrices = async (req, res) => {
 
 module.exports = {
     list,
-    getExchangePrices,
+    getSymbols,
 };

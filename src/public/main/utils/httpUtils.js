@@ -25,7 +25,13 @@ const post = ({ type, body, url }) => {
         credentials: 'include',
         body: type === httpConstants.formData.type ? body : JSON.stringify(body),
     };
-    return fetchUrl(url, params).then(response => response.json().then(json => ({ status: response.status, json })));
+    return fetchUrl(url, params).then(async (response) => {
+        const json = await response.json();
+        return { status: response.status, json };
+    }).then((json) => {
+        console.log(json);
+        return json;
+    });
 };
 
 const get = ({ url }) => {
@@ -36,7 +42,13 @@ const get = ({ url }) => {
         headers,
         credentials: 'include',
     };
-    return fetchUrl(url, params).then(response => response.json().then(json => ({ status: response.status, json })));
+    return fetchUrl(url, params).then(async (response) => {
+        const json = await response.json();
+        return { status: response.status, json };
+    }).then((json) => {
+        console.log(json);
+        return json;
+    });
 };
 
 const patch = ({ body, url }) => {
@@ -49,7 +61,13 @@ const patch = ({ body, url }) => {
         credentials: 'include',
         body: JSON.stringify(body),
     };
-    return fetchUrl(url, params).then(response => response.json().then(json => ({ status: response.status, json })));
+    return fetchUrl(url, params).then(async (response) => {
+        const json = await response.json();
+        return { status: response.status, json };
+    }).then((json) => {
+        console.log(json);
+        return json;
+    });
 };
 
 export default {

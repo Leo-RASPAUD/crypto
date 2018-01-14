@@ -4,6 +4,7 @@ import Dashboard from './Dashboard.component';
 
 const mapStateToProps = state => ({
     user: state.app.user,
+    exchangesData: state.app.exchanges,
 });
 
 

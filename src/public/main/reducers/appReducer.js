@@ -16,7 +16,6 @@ const appReducer = (state = {
 }, action) => {
     switch (action.type) {
         case loginStates.RECEIVE_LOGIN_SUCCESSFUL:
-            console.log(action);
             return {
                 ...state,
                 userAuthenticated: !!action.user,
@@ -28,6 +27,7 @@ const appReducer = (state = {
                 userAuthenticated: !!action.user,
                 user: action.user || emptyUser,
                 loadingUser: action.loadingUser,
+                exchanges: action.exchanges,
             };
         default:
             return state;

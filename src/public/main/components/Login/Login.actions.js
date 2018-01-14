@@ -11,7 +11,6 @@ const submitLogin = credentials => async (dispatch) => {
     dispatch({ type: states.REQUEST_SUBMIT_LOGIN });
     try {
         const { status, json } = await userService.login({ ...credentials, email: credentials.email.toLowerCase() });
-        console.log(status, json);
         if (status !== 200) {
             throw new SubmissionError({
                 _error: json.message,
@@ -19,8 +18,8 @@ const submitLogin = credentials => async (dispatch) => {
         } else {
             window.localStorage.setItem(localStorageConstants.userId, json._id);
             window.localStorage.setItem(localStorageConstants.token, json.token);
+            console.log(json.exchanges);
             const exchanges = await Promise.all(json.exchanges.map(exchange => exchangeService.getSymbols(exchange.name)));
-            console.log(exchanges);
             dispatch({
                 type: states.RECEIVE_LOGIN_SUCCESSFUL,
                 user: json,
@@ -29,7 +28,6 @@ const submitLogin = credentials => async (dispatch) => {
             dispatch(push(paths.authenticated.dashboard));
         }
     } catch (error) {
-        console.log(error);
         throw new SubmissionError({
             _error: error.errors._error,
         });

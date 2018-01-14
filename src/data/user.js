@@ -20,7 +20,7 @@ const addExchange = async (req, res) => {
             { safe: true, upsert: true },
         );
         const user = await User.findById(req.user.id);
-        return res.send(user);
+        return res.status(200).send(user);
     } catch (error) {
         console.log(error);
         return res.status(500).json({ _error: `Error code : ${error.code}` });
@@ -57,7 +57,7 @@ const login = (req, res, next) => {
             if (loginErr) {
                 return next(loginErr);
             }
-            return res.send(user);
+            return res.status(200).send(user);
         });
     })(req, res, next);
 };
