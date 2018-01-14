@@ -21,7 +21,7 @@ const getExchangePrices = async (req, res) => {
         console.log(`Error while trying to get the exchange ${exchangeName} ${error}`);
         return res.status(500).json({ _error: `Error code : ${error.code}` });
     }
-}
+};
 
 module.exports = {
     list,

@@ -6,13 +6,15 @@ import React from 'react';
 import thunkMiddleware from 'redux-thunk';
 import createHistory from 'history/createBrowserHistory';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-
 import teal from 'material-ui/colors/teal';
 import pink from 'material-ui/colors/red';
 
 import App from 'components/App/App.container';
 import mainReducer from 'reducers/mainReducer';
+
+import 'assets/loader.css';
 import settings from './utils/settings';
+
 
 settings.initEnvironmentVariables().then(() => {
     const history = createHistory();

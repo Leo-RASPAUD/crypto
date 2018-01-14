@@ -31,8 +31,6 @@ const addExchange = async (req, res) => {
 const createUser = async (req, res) => {
     const { email, password } = req.body;
     const user = new User({ email, password });
-    console.log(email, password);
-
     let newUser;
     try {
         newUser = await user.save();
@@ -59,11 +57,7 @@ const login = (req, res, next) => {
             if (loginErr) {
                 return next(loginErr);
             }
-            return res.json({
-                id: user.id,
-                email: user.email,
-                apiKeys: user.apiKeys,
-            });
+            return res.send(user);
         });
     })(req, res, next);
 };
@@ -72,7 +66,6 @@ const getUserDetails = async (req, res) => {
     let user;
     try {
         user = await User.findOne({ _id: req.params.id });
-        console.log(user);
         return res.send(user);
     } catch (error) {
         console.log(error);

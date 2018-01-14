@@ -3,7 +3,6 @@ import httpConstants from 'constants/http.constants';
 const protocol = window.location.protocol !== 'https:' ? window.location.protocol : 'https:';
 const fetchUrl = (url, params) => fetch(`${protocol}//${window.API_HOST}${url}`, params);
 
-
 /* eslint indent:0 */
 const getTypeHeader = (type) => {
     switch (type) {
@@ -23,6 +22,7 @@ const post = ({ type, body, url }) => {
     const params = {
         method: httpConstants.requestTypes.post,
         headers,
+        credentials: 'include',
         body: type === httpConstants.formData.type ? body : JSON.stringify(body),
     };
     return fetchUrl(url, params).then(response => response.json().then(json => ({ status: response.status, json })));
@@ -34,8 +34,9 @@ const get = ({ url }) => {
     const params = {
         method: httpConstants.requestTypes.get,
         headers,
+        credentials: 'include',
     };
-    return fetchUrl(url, params).then(response => response).then(json => ({ status: json.status, json }));
+    return fetchUrl(url, params).then(response => response.json().then(json => ({ status: response.status, json })));
 };
 
 const patch = ({ body, url }) => {
@@ -45,6 +46,7 @@ const patch = ({ body, url }) => {
     const params = {
         method: httpConstants.requestTypes.patch,
         headers,
+        credentials: 'include',
         body: JSON.stringify(body),
     };
     return fetchUrl(url, params).then(response => response.json().then(json => ({ status: response.status, json })));

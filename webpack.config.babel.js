@@ -9,6 +9,7 @@ const config = {
             reducers: path.resolve(__dirname, './src/public/main/reducers'),
             services: path.resolve(__dirname, './src/public/main/services'),
             utils: path.resolve(__dirname, './src/public/main/utils'),
+            assets: path.resolve(__dirname, './src/public/main/assets'),
             constants: path.resolve(__dirname, './src/public/main/constants'),
         },
         extensions: ['.js'],

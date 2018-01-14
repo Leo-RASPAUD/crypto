@@ -3,9 +3,7 @@ const jwt = require('jsonwebtoken');
 const conf = require('../../conf/conf');
 const User = require('../models/User/User');
 
-passport.serializeUser((user, cb) => {
-    cb(null, user.token);
-});
+passport.serializeUser((user, cb) => cb(null, user.token));
 passport.deserializeUser((token, callback) => {
     try {
         const payload = jwt.verify(
@@ -14,15 +12,17 @@ passport.deserializeUser((token, callback) => {
             { issuer: conf.authentication.issuer },
         );
 
-        return User.findById(payload.sub).then((user) => {
-            if (!user) {
-                callback(null, false);
-            }
-            callback(null, {
-                id: user._id,
-                email: user.email,
+        return User.findById(payload.sub)
+            .then((user) => {
+                callback(
+                    null,
+                    {
+                        id: user._id,
+                        email: user.email,
+                        countries: user.countries,
+                    },
+                );
             });
-        });
     } catch (e) {
         return callback(e);
     }

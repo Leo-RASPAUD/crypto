@@ -3,9 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const passport = require('passport');
 const mongoSession = require('mongoose-express-session');
-const expressSession = require('express-session');
-const mongoose = require('mongoose');
 const session = require('express-session');
+const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 
 const security = require('./src/passport/security');
@@ -22,8 +21,8 @@ const HOST = process.env.HOST || 'localhost';
 const DB_PORT = process.env.DB_PORT || '54621';
 const DB_NAME = process.env.DB_NAME || 'crypto';
 
-const MongooseStore = mongoSession(expressSession.Store);
-const db = mongoose.connect(`${DB_TYPE}://${HOST}:${DB_PORT}/${DB_NAME}`);
+mongoose.connect(`${DB_TYPE}://${HOST}:${DB_PORT}/${DB_NAME}`);
+const MongooseStore = mongoSession(session.Store);
 const mongoStore = new MongooseStore({ connection: mongoose });
 mongoose.Promise = global.Promise;
 
@@ -33,6 +32,8 @@ app.use(cors({
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: '50mb' }));
+
+app.use(cookieParser(conf.authentication.sessionSecret));
 app.use(session({
     secret: conf.authentication.sessionSecret,
     resave: true,
@@ -41,7 +42,6 @@ app.use(session({
     cookie: { domain: 'localhost' },
     key: 'sessionId',
 }));
-app.use(cookieParser(conf.authentication.sessionSecret));
 
 // Passport
 passport.use(localStrategy);
@@ -54,8 +54,8 @@ app.post('/login', userEndpoints.login);
 app.get('/user', security.isAuthenticated, userEndpoints.listUsers);
 app.post('/createUser', userEndpoints.createUser);
 app.get('/user/:id', security.isAuthenticated, userEndpoints.getUserDetails);
-app.get('/exchanges', security.isAuthenticated, exchangesEndpoints.list);
-app.get('/exchanges/:name', security.isAuthenticated, exchangesEndpoints.getExchangePrices);
+app.get('/exchange', security.isAuthenticated, exchangesEndpoints.list);
+app.get('/exchange/:name', security.isAuthenticated, exchangesEndpoints.getExchangePrices);
 
 app.listen(PORT, async () => {
     exchangesHandler.getData();
