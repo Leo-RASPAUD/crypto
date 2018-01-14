@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const passport = require('passport');
 const mongoSession = require('mongoose-express-session');
@@ -48,6 +49,15 @@ passport.use(localStrategy);
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/', express.static(path.join(__dirname, './src/public/index.html')));
+app.use('/assets', express.static(path.join(__dirname, './assets')));
+
+const indexPath = path.join(__dirname, './src/public/index.html');
+
+app.get('/', (_, res) => {
+    res.sendFile(indexPath);
+});
+
 // Endpoints
 app.post('/user/:id/addExchange', security.isAuthenticated, userEndpoints.addExchange);
 app.post('/login', userEndpoints.login);
@@ -56,6 +66,24 @@ app.post('/createUser', userEndpoints.createUser);
 app.get('/user/:id', security.isAuthenticated, userEndpoints.getUserDetails);
 app.get('/exchange', security.isAuthenticated, exchangesEndpoints.list);
 app.get('/exchange/:name', security.isAuthenticated, exchangesEndpoints.getSymbols);
+
+app.get('/getApiParams', (_, res) => {
+    res.send({
+        host: process.env.API_HOST || 'localhost:8085',
+        port: PORT,
+    });
+});
+
+app.get('*', (req, res) => {
+    const file = req.path.split('/');
+    if (req.originalUrl.match(/.*favicon.*png$/)) {
+        res.sendFile(path.join(__dirname, './assets', `${file[file.length - 2]}/${file[file.length - 1]}`));
+    } else if (req.originalUrl.match(/.*.(ttf|woff|woff2|png|svg|jpg|js|eot|gif|css)$/)) {
+        res.sendFile(path.join(__dirname, './assets', file[file.length - 1]));
+    } else {
+        res.sendFile(indexPath);
+    }
+});
 
 app.listen(PORT, async () => {
     exchangesHandler.getData();

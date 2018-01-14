@@ -3,7 +3,23 @@ import webpack from 'webpack';
 import webpackRules from './Webpack/webpackRules';
 
 const config = {
-    entry: path.resolve(__dirname, './public/src/main/main.js'),
+    resolve: {
+        alias: {
+            components: path.resolve(__dirname, './src/public/main/components'),
+            reducers: path.resolve(__dirname, './src/public/main/reducers'),
+            services: path.resolve(__dirname, './src/public/main/services'),
+            utils: path.resolve(__dirname, './src/public/main/utils'),
+            assets: path.resolve(__dirname, './src/public/main/assets'),
+            constants: path.resolve(__dirname, './src/public/main/constants'),
+        },
+        extensions: ['.js'],
+        modules: [
+            path.resolve(__dirname, './node_modules'),
+            path.resolve(__dirname, './src/public/main'),
+        ],
+    },
+
+    entry: path.resolve(__dirname, './src/public/main/main.js'),
 
     output: {
         path: path.join(__dirname, './assets'),
@@ -38,9 +54,8 @@ const config = {
     module: {
         rules: [
             webpackRules.babelLoaderRule,
-            webpackRules.cssLoaderRule,
-            webpackRules.fontLoaderRule,
             webpackRules.eslintLoaderRule,
+            webpackRules.cssLoaderRule,
         ],
     },
 

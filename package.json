@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "apiWatch": "./node_modules/.bin/nodemon server.js",
-    "watch": "./node_modules/.bin/webpack-dev-server --hot"
+    "watch": "./node_modules/.bin/webpack-dev-server --hot",
+    "start": "./node_modules/.bin/webpack --env=prod -p --config ./webpack.prod.config.babel.js --progress --colors && node server.js"
   },
   "babel": {
     "presets": [
@@ -29,6 +30,7 @@
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.1.0",
+    "kucoin-api": "^0.0.3",
     "material-ui": "^1.0.0-beta.27",
     "mongoose": "^5.0.0-rc2",
     "mongoose-express-session": "^0.0.5",
