@@ -28,10 +28,7 @@ const post = ({ type, body, url }) => {
     return fetchUrl(url, params).then(async (response) => {
         const json = await response.json();
         return { status: response.status, json };
-    }).then((json) => {
-        console.log(json);
-        return json;
-    });
+    }).then(json => json);
 };
 
 const get = ({ url }) => {
@@ -45,10 +42,7 @@ const get = ({ url }) => {
     return fetchUrl(url, params).then(async (response) => {
         const json = await response.json();
         return { status: response.status, json };
-    }).then((json) => {
-        console.log(json);
-        return json;
-    });
+    }).then(json => json);
 };
 
 const patch = ({ body, url }) => {
@@ -64,10 +58,7 @@ const patch = ({ body, url }) => {
     return fetchUrl(url, params).then(async (response) => {
         const json = await response.json();
         return { status: response.status, json };
-    }).then((json) => {
-        console.log(json);
-        return json;
-    });
+    }).then(json => json);
 };
 
 export default {

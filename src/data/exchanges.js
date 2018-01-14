@@ -1,5 +1,15 @@
 const Exchange = require('../models/Exchange/Exchange');
 
+const sortByName = (a, b) => {
+    if (a.name < b.name) {
+        return -1;
+    }
+    if (a.name > b.name) {
+        return 1;
+    }
+    return 0;
+}
+
 const list = async (req, res) => {
     let exchanges;
     try {
@@ -16,6 +26,7 @@ const getSymbols = async (req, res) => {
     const exchangeName = req.params.name;
     try {
         exchange = await Exchange.findOne({ name: exchangeName }).populate('symbols');
+        exchange.symbols.sort(sortByName);
         return res.send(exchange);
     } catch (error) {
         console.log(`Error while trying to get the exchange ${exchangeName} ${error}`);
