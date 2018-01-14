@@ -10,16 +10,16 @@ const updateExchange = async ({ symbols, exchange }) => {
     console.log(`Kucoin exchange symbols updated in ${Date.now() - now}ms`);
 };
 
-const updateSymbols = async ({ prices, keys }) => {
+const updateSymbols = async ({ prices }) => {
     const exchange = await Exchange.findOne({ name: 'Kucoin' });
     const { _id } = exchange;
-    const { length } = keys;
+    const { length } = prices;
     const promises = [];
     const time = Date.now();
     for (let i = 0; i < length; i += 1) {
         promises.push(Symbol.findOneAndUpdate(
-            { exchange: _id, name: keys[i] },
-            { $push: { prices: { value: prices[keys[i]], time } } },
+            { exchange: _id, name: prices[i].symbol.replace('-', '') },
+            { $push: { prices: { value: prices[i].lastDealPrice, time } } },
             { safe: true, upsert: true },
         ));
     }
@@ -31,7 +31,9 @@ const updateSymbols = async ({ prices, keys }) => {
 const getData = async () => {
     console.log('Refresh Kucoin data ...');
     const kc = new Kucoin();
-    kc.getTicker().then(console.log).catch(console.error);
+    const prices = await kc.getTicker({ pair: '' });
+    await updateSymbols({ prices: prices.data });
+    console.log('Refresh Kucoin data: OK');
 };
 
 

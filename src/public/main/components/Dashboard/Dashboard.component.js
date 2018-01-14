@@ -17,6 +17,13 @@ const styles = theme => ({
     exchanges: {
         display: 'flex',
     },
+    wrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    exchange: {
+        margin: 25,
+    },
 });
 
 @withStyles(styles)
@@ -35,10 +42,10 @@ class Dashboard extends React.Component {
         console.log(symbol.prices);
         const formattedPrices = symbol.prices.map((price) => {
             const time = new Date(price.time);
-            const timeToDisplay = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+            const timeToDisplay = `${time.getHours() || 0}:${time.getMinutes() || 0}:${time.getSeconds() || 0}`;
             return {
                 time: timeToDisplay,
-                value: Number.parseFloat(price.value),
+                value: Math.abs(Number.parseFloat(price.value)),
             };
         });
         this.setState({ linechartData: formattedPrices });
@@ -47,15 +54,17 @@ class Dashboard extends React.Component {
     render() {
         const { classes, user, exchangesData } = this.props;
         return (
-            <div className={classes.test}>
+            <div className={classes.wrapper}>
                 <div>
                     User : {user.email}
                 </div>
-                Exchanges:
-                {user.exchanges.map(exchange => <div key={user.email}>{exchange.name}</div>)}
+                <div>
+                    Exchanges:
+                    {user.exchanges.map(exchange => <div key={exchange.name}>{exchange.name}</div>)}
+                </div>
                 <div className={classes.exchanges}>
                     {exchangesData.map(exchange => (
-                        <div key={exchange.name}>
+                        <div key={exchange.name} className={classes.exchange}>
                             <div>Exchange name: {exchange.name}</div>
                             <Paper className={classes.root}>
                                 <Table className={classes.table}>
@@ -85,7 +94,7 @@ class Dashboard extends React.Component {
                             <Line dot={false} type="monotone" dataKey="value" stroke="#8884d8" />
                             <CartesianGrid stroke="#ccc" />
                             <XAxis dataKey="time" />
-                            <YAxis dataKey="value" domain={['auto', 'auto']} />
+                            <YAxis dataKey="value" />
                             <Tooltip />
                         </LineChart>
                     )}

@@ -33,7 +33,6 @@ const getData = async () => {
     const clientBinance = binance.default();
     const prices = await clientBinance.prices();
     const keys = Object.keys(prices);
-    // await updateExchange({ keys, exchange });
     await updateSymbols({ prices, keys });
     console.log('Refresh Binance data: OK');
 };

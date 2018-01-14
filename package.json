@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "apiWatch": "./node_modules/.bin/nodemon server.js",
-    "watch": "./node_modules/.bin/webpack-dev-server --hot",
+    "watch": "./node_modules/.bin/webpack-dev-server --hot --config ./webpack.config.babel.js",
     "start": "./node_modules/.bin/webpack --env=prod -p --config ./webpack.prod.config.babel.js --progress --colors && node server.js"
   },
   "babel": {
