@@ -1,16 +1,8 @@
-import localStorageConstants from 'constants/localStorage.constants';
 import httpConstants from 'constants/http.constants';
 
 const protocol = window.location.protocol !== 'https:' ? window.location.protocol : 'https:';
 const fetchUrl = (url, params) => fetch(`${protocol}//${window.API_HOST}${url}`, params);
 
-const getAuthHeader = () => {
-    const accessToken = window.localStorage.getItem(localStorageConstants.accessToken);
-    if (accessToken) {
-        return { Authorization: `Bearer ${accessToken}` };
-    }
-    return null;
-};
 
 /* eslint indent:0 */
 const getTypeHeader = (type) => {
@@ -24,10 +16,8 @@ const getTypeHeader = (type) => {
     }
 };
 
-const post = ({ type, body, url, isAuth }) => {
-    const headers = {
-        ...(isAuth ? getAuthHeader() : {}),
-    };
+const post = ({ type, body, url }) => {
+    const headers = {};
     headers[httpConstants.contentType] = getTypeHeader(type);
 
     const params = {
@@ -38,22 +28,18 @@ const post = ({ type, body, url, isAuth }) => {
     return fetchUrl(url, params).then(response => response.json().then(json => ({ status: response.status, json })));
 };
 
-const get = ({ url, isAuth }) => {
-    const headers = {
-        ...(isAuth ? getAuthHeader() : {}),
-    };
+const get = ({ url }) => {
+    const headers = {};
     headers[httpConstants.contentType] = httpConstants.json.value;
     const params = {
         method: httpConstants.requestTypes.get,
         headers,
     };
-    return fetchUrl(url, params).then(response => response.json().then(json => ({ status: response.status, json })));
+    return fetchUrl(url, params).then(response => response).then(json => ({ status: json.status, json }));
 };
 
-const patch = ({ body, url, isAuth }) => {
-    const headers = {
-        ...(isAuth ? getAuthHeader() : {}),
-    };
+const patch = ({ body, url }) => {
+    const headers = {};
     headers[httpConstants.contentType] = httpConstants.json.value;
 
     const params = {

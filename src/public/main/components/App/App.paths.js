@@ -1,11 +1,9 @@
 const paths = {
     public: {
-        home: '/home',
+        login: '/login',
     },
     authenticated: {
-        dashboard: {
-            home: '/dashboard',
-        },
+        dashboard: '/dashboard',
     },
 };
 

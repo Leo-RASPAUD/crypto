@@ -49,10 +49,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Endpoints
-app.post('/user/createUser', userEndpoints.createUser);
+app.post('/user/:id/addExchange', security.isAuthenticated, userEndpoints.addExchange);
+app.post('/login', userEndpoints.login);
 app.get('/user', security.isAuthenticated, userEndpoints.listUsers);
-app.post('/user/addExchange', security.isAuthenticated, userEndpoints.addExchange);
-app.post('/user/login', userEndpoints.login);
+app.post('/createUser', userEndpoints.createUser);
+app.get('/user/:id', security.isAuthenticated, userEndpoints.getUserDetails);
 app.get('/exchanges', security.isAuthenticated, exchangesEndpoints.list);
 app.get('/exchanges/:name', security.isAuthenticated, exchangesEndpoints.getExchangePrices);
 

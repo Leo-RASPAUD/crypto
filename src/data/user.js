@@ -68,9 +68,22 @@ const login = (req, res, next) => {
     })(req, res, next);
 };
 
+const getUserDetails = async (req, res) => {
+    let user;
+    try {
+        user = await User.findOne({ _id: req.params.id });
+        console.log(user);
+        return res.send(user);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: `Error code : ${error.code}` });
+    }
+};
+
 module.exports = {
     addExchange,
     createUser,
     listUsers,
     login,
+    getUserDetails,
 };

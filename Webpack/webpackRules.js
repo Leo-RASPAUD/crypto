@@ -18,6 +18,12 @@ const babelLoaderRule = {
     }],
 };
 
+const cssLoaderRule = {
+    test: /\.css$/,
+    use: ['style-loader', 'css-loader'],
+};
+
+
 const eslintLoaderRule = {
     test: /\.js$/,
     exclude: /node_modules/,
@@ -27,4 +33,5 @@ const eslintLoaderRule = {
 export default {
     babelLoaderRule,
     eslintLoaderRule,
+    cssLoaderRule,
 };

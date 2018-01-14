@@ -7,7 +7,7 @@ module.exports = new LocalStrategy({ usernameField: 'email', passwordField: 'pas
     User.findOne({ email })
         .then((user) => {
             if (!user) {
-                return done(null, false, { email: 'Account not found' });
+                return done(null, false, { message: 'Account not found' });
             }
             return user.comparePassword(password)
                 .then((isMatch) => {
@@ -29,7 +29,7 @@ module.exports = new LocalStrategy({ usernameField: 'email', passwordField: 'pas
                             token,
                         });
                     }
-                    return done(null, false, { password: 'Incorrect password' });
+                    return done(null, false, { message: 'Incorrect password' });
                 });
         }),
 );

@@ -1,21 +1,21 @@
+/* eslint react/no-did-update-set-state: 0 */
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import paths from 'components/App/App.paths';
-import Home from 'components/Home/Home.container';
-import Dashboard from 'components/Dashboard/Dashboard.container';
+import PropTypes from 'prop-types';
+import RouterComponent from './Router/Router.component';
 
 class App extends React.Component {
     render() {
         return (
-            <div>
-                <Switch>
-                    <Route exact path={paths.public.home} render={() => <Home />} />
-                    <Route exact path={paths.authenticated.dashboard.home} render={() => <Dashboard />} />
-                    <Redirect to={paths.public.home} />
-                </Switch>
-            </div>
-        );
+            <RouterComponent
+                authenticated={this.props.authenticated}
+                location={this.props.location}
+            />);
     }
 }
+
+App.propTypes = {
+    location: PropTypes.object.isRequired,
+    authenticated: PropTypes.bool.isRequired,
+};
 
 export default App;

@@ -42,6 +42,7 @@ const config = {
         rules: [
             webpackRules.babelLoaderRule,
             webpackRules.eslintLoaderRule,
+            webpackRules.cssLoaderRule,
         ],
     },
 };
