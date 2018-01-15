@@ -9,11 +9,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setUser: ({ user, loadingUser, exchanges }) => dispatch({
+    setUser: ({ user, loadingUser, exchanges, accountInfo }) => dispatch({
         type: states.RECEIVE_CHECK_USER_TOKEN,
         user,
         loadingUser,
         exchanges,
+        accountInfo,
     }),
 });
 

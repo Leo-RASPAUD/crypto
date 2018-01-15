@@ -37,7 +37,13 @@ const getData = async () => {
     console.log('Refresh Binance data: OK');
 };
 
+const getAccountInfo = ({ credentials }) => {
+    console.log('Getting Binance account informations...');
+    const clientBinance = binance.default({ apiKey: credentials.apiKey, apiSecret: credentials.apiSecret });
+    return clientBinance.accountInfo();
+};
 
 module.exports = {
     getData,
+    getAccountInfo,
 };

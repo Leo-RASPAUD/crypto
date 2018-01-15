@@ -13,6 +13,7 @@ const appReducer = (state = {
     user: emptyUser,
     loadingUser: true,
     exchanges: [],
+    accountInfo: {},
 }, action) => {
     switch (action.type) {
         case loginStates.RECEIVE_LOGIN_SUCCESSFUL:
@@ -20,6 +21,8 @@ const appReducer = (state = {
                 ...state,
                 userAuthenticated: !!action.user,
                 user: action.user,
+                exchanges: action.exchanges,
+                accountInfo: action.accountInfo,
             };
         case states.RECEIVE_CHECK_USER_TOKEN:
             return {
@@ -28,6 +31,7 @@ const appReducer = (state = {
                 user: action.user || emptyUser,
                 loadingUser: action.loadingUser,
                 exchanges: action.exchanges,
+                accountInfo: action.accountInfo,
             };
         default:
             return state;

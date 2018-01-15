@@ -32,7 +32,8 @@ const isAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next();
     }
-    return res.sendStatus(403);
+    console.log('error');
+    return res.status(403).send({ status: 403, message: 'User not authorized' });
 };
 
 module.exports = {

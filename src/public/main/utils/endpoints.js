@@ -4,6 +4,7 @@ const baseExchange = '/exchange';
 const userEndpoints = {
     login: '/login',
     getUserDetails: id => `${baseUser}/${id}`,
+    getAccountInfo: id => `${baseUser}/${id}/accountInfo`,
 };
 
 const exchangeEndpoints = {

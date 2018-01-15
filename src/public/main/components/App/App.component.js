@@ -17,17 +17,17 @@ class App extends React.Component {
 
     componentDidMount = async () => {
         const userId = window.localStorage.getItem(localStorageConstants.userId);
-        console.log(userId);
         if (!userId) {
-            this.props.setUser({ user: null, loadingUser: false, exchanges: [] });
+            this.props.setUser({ user: null, loadingUser: false, exchanges: [], accountInfo: {} });
         } else {
             const { json, status } = await userService.getUserDetails(userId);
             if (status === 200) {
                 const exchangesHttpResult = await Promise.all(json.exchanges.map(exchange => exchangeService.getSymbols(exchange.name)));
                 const exchanges = exchangesHttpResult.map(item => item.json);
-                this.props.setUser({ user: json, loadingUser: false, exchanges });
+                const accountInfo = await userService.getAccountInfo(userId);
+                this.props.setUser({ user: json, loadingUser: false, exchanges, accountInfo: accountInfo.json });
             } else {
-                this.props.setUser({ loadingUser: false, exchanges: [] });
+                this.props.setUser({ loadingUser: false, exchanges: [], accountInfo: {} });
             }
         }
     }

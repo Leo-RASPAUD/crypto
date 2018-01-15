@@ -36,7 +36,12 @@ const getData = async () => {
     console.log('Refresh Kucoin data: OK');
 };
 
+const getAccountInfo = async ({ credentials }) => {
+    const kc = new Kucoin(credentials.apiKey, credentials.apiSecret);
+    return kc.getBalance();
+};
 
 module.exports = {
     getData,
+    getAccountInfo,
 };

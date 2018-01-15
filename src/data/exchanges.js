@@ -8,7 +8,7 @@ const sortByName = (a, b) => {
         return 1;
     }
     return 0;
-}
+};
 
 const list = async (req, res) => {
     let exchanges;

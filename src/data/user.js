@@ -1,5 +1,7 @@
 const passport = require('passport');
 const User = require('../models/User/User');
+const binance = require('../handlers/binance');
+const kucoin = require('../handlers/kucoin');
 
 const listUsers = async (req, res) => {
     let users;
@@ -73,10 +75,37 @@ const getUserDetails = async (req, res) => {
     }
 };
 
+const getAccountInfo = async (req, res) => {
+    let user;
+    let Binance;
+    let Kucoin;
+    let resultKucoin;
+    try {
+        user = await User.findOne({ _id: req.params.id });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: `Error code : ${error.code}` });
+    }
+    const isBinance = user.exchanges.find(exchange => exchange.name === 'Binance');
+    const isKucoin = user.exchanges.find(exchange => exchange.name === 'Kucoin');
+
+    if (isBinance) {
+        Binance = await binance.getAccountInfo({ credentials: isBinance });
+    }
+    if (isKucoin) {
+        resultKucoin = await kucoin.getAccountInfo({ credentials: isKucoin });
+        Kucoin = {
+            balances: resultKucoin.data.map(item => ({ asset: item.coinType, free: item.balance })),
+        };
+    }
+    return res.send({ Binance, Kucoin });
+};
+
 module.exports = {
     addExchange,
     createUser,
     listUsers,
     login,
     getUserDetails,
+    getAccountInfo,
 };

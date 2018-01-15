@@ -17,11 +17,14 @@ const submitLogin = credentials => async (dispatch) => {
         } else {
             window.localStorage.setItem(localStorageConstants.userId, json._id);
             window.localStorage.setItem(localStorageConstants.token, json.token);
-            const exchanges = await Promise.all(json.exchanges.map(exchange => exchangeService.getSymbols(exchange.name)));
+            const exchangesHttpResult = await Promise.all(json.exchanges.map(exchange => exchangeService.getSymbols(exchange.name)));
+            const exchanges = exchangesHttpResult.map(item => item.json);
+            const accountInfo = await userService.getAccountInfo(json._id);
             dispatch({
                 type: states.RECEIVE_LOGIN_SUCCESSFUL,
                 user: json,
                 exchanges,
+                accountInfo: accountInfo.json,
             });
             dispatch(push(paths.authenticated.dashboard));
         }
