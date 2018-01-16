@@ -38,7 +38,32 @@ const getData = async () => {
 
 const getAccountInfo = async ({ credentials }) => {
     const kc = new Kucoin(credentials.apiKey, credentials.apiSecret);
-    return kc.getBalance();
+    const promises = [];
+    let accountInfo;
+    try {
+        accountInfo = await kc.getBalance();
+    } catch (error) {
+        console.log(error);
+    }
+    const formattedResult = {
+        balances: accountInfo.data.map(item => ({ asset: item.coinType, free: item.balance })),
+    };
+    formattedResult.balances.filter(item => item.free > 0.001).map((balanceItem) => {
+        const pair = balanceItem.asset === 'ETH' || balanceItem.asset === 'BTC' ? `${balanceItem.asset}-USDT` : `${balanceItem.asset}-ETH`;
+        return promises.push(kc.getDealtOrders({ pair }));
+    });
+
+    try {
+        formattedResult.orders = await Promise.all(promises);
+        formattedResult.orders = formattedResult.orders
+            .filter(itemFilter => itemFilter.data.datas.length > 0)
+            .map(item => item.data.datas)
+            .map(itemMapArray => itemMapArray.map(itemMap => ({ ...itemMap, pair: `${itemMap.coinType}${itemMap.coinTypePair}` })));
+    } catch (error) {
+        console.log(error);
+    }
+
+    return formattedResult;
 };
 
 module.exports = {

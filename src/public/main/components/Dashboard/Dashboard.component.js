@@ -57,15 +57,26 @@ class Dashboard extends React.Component {
         selectedCoin: '',
     }
 
+    getDealPrice = (orders, asset) => {
+        const pair = asset === 'ETH' || asset === 'BTC' ? `${asset}USDT` : `${asset}ETH`;
+        const results = orders.map(order => order.find(item => item.pair === pair)).filter(isNull => isNull);
+        if (results) {
+            return results.reduce((a, b) => a + b.dealPrice, 0);
+        }
+        return 'N/A';
+    }
+
     displayPrices = (symbol) => {
         const formattedPrices = formatPrices(symbol.prices);
         this.setState({ linechartData: formattedPrices, selectedCoin: symbol.name });
     };
 
+
     selectValue = (exchange, asset) => {
-        const symbol = exchange.symbols.find(exchangeSymbol => exchangeSymbol.name === `${asset}ETH`);
+        const selectedCoin = asset === 'ETH' || asset === 'BTC' ? `${asset}USDT` : `${asset}ETH`;
+        const symbol = exchange.symbols.find(exchangeSymbol => exchangeSymbol.name === selectedCoin);
         const formattedPrices = formatPrices(symbol.prices);
-        this.setState({ linechartData: formattedPrices, selectedCoin: `${asset}ETH` });
+        this.setState({ linechartData: formattedPrices, selectedCoin });
     }
 
     render() {
@@ -88,13 +99,18 @@ class Dashboard extends React.Component {
                                 <div>
                                     {accountInfo[exchange.name].balances.map(item =>
                                         item.free > 0.001 ? (
-                                            <div
-                                                className={classes.balanceItem}
-                                                onClick={() => this.selectValue(exchange, item.asset)}
-                                                key={`${exchange.name}-${item.asset}`}
-                                            >
-                                                <span>{item.asset}: </span>
-                                                <span>{item.free}</span>
+                                            <div key={`${exchange.name}-${item.asset}`}>
+                                                <div
+                                                    className={classes.balanceItem}
+                                                    onClick={() => this.selectValue(exchange, item.asset)}
+                                                >
+                                                    <span>{item.asset}: </span>
+                                                    <span>{item.free}</span>
+                                                </div>
+                                                <div>
+                                                    <span>Buy price: </span>
+                                                    <span>{this.getDealPrice(accountInfo[exchange.name].orders, item.asset)}</span>
+                                                </div>
                                             </div>
                                         ) : null)}
                                 </div>

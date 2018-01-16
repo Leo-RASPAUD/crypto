@@ -37,11 +37,31 @@ const getData = async () => {
     console.log('Refresh Binance data: OK');
 };
 
-const getAccountInfo = ({ credentials }) => {
+const getAccountInfo = async ({ credentials }) => {
     console.log('Getting Binance account informations...');
     const clientBinance = binance.default({ apiKey: credentials.apiKey, apiSecret: credentials.apiSecret });
-    return clientBinance.accountInfo();
+    let accountInfo;
+    const promises = [];
+    try {
+        accountInfo = await clientBinance.accountInfo();
+    } catch (error) {
+        console.log(error);
+    }
+    accountInfo.balances.filter(item => item.free > 0.001).map((balanceItem) => {
+        const symbol = balanceItem.asset === 'ETH' || balanceItem.asset === 'BTC' ? `${balanceItem.asset}USDT` : `${balanceItem.asset}ETH`;
+        return promises.push(clientBinance.allOrders({ symbol }));
+    });
+    try {
+        accountInfo.orders = await Promise.all(promises);
+        accountInfo.orders = accountInfo.orders
+            .map(order => order.filter(item => item.side === 'BUY'))
+            .map(itemMapArray => itemMapArray.map(itemMap => ({ ...itemMap, dealPrice: itemMap.price, pair: itemMap.symbol })));
+    } catch (error) {
+        console.log(error);
+    }
+    return accountInfo;
 };
+
 
 module.exports = {
     getData,

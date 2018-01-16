@@ -79,7 +79,6 @@ const getAccountInfo = async (req, res) => {
     let user;
     let Binance;
     let Kucoin;
-    let resultKucoin;
     try {
         user = await User.findOne({ _id: req.params.id });
     } catch (error) {
@@ -93,10 +92,7 @@ const getAccountInfo = async (req, res) => {
         Binance = await binance.getAccountInfo({ credentials: isBinance });
     }
     if (isKucoin) {
-        resultKucoin = await kucoin.getAccountInfo({ credentials: isKucoin });
-        Kucoin = {
-            balances: resultKucoin.data.map(item => ({ asset: item.coinType, free: item.balance })),
-        };
+        Kucoin = await kucoin.getAccountInfo({ credentials: isKucoin });
     }
     return res.send({ Binance, Kucoin });
 };
