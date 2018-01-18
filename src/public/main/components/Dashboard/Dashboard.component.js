@@ -57,6 +57,16 @@ class Dashboard extends React.Component {
         selectedCoin: '',
     }
 
+    getCurrentPrice = (exchange, symbol) => {
+        const result = exchange.symbols.find(item => item.name === `${symbol}ETH`);
+        return result ? result.prices[result.prices.length - 1].value : 0;
+    }
+    getCurrentPriceDollars = (isEth, exchange, quantity, currentPrice) => {
+        const result = exchange.symbols.find(item => item.name === 'ETHUSDT');
+        const price = result ? result.prices[result.prices.length - 1].value : 0;
+        return isEth ? price * quantity : price * quantity * currentPrice;
+    }
+
     getDealPrice = (orders, asset) => {
         const pair = asset === 'ETH' || asset === 'BTC' ? `${asset}USDT` : `${asset}ETH`;
         const results = orders.map(order => order.find(item => item.pair === pair)).filter(isNull => isNull);
@@ -66,18 +76,17 @@ class Dashboard extends React.Component {
         return 'N/A';
     }
 
-    displayPrices = (symbol) => {
-        const formattedPrices = formatPrices(symbol.prices);
-        this.setState({ linechartData: formattedPrices, selectedCoin: symbol.name });
-    };
-
-
     selectValue = (exchange, asset) => {
         const selectedCoin = asset === 'ETH' || asset === 'BTC' ? `${asset}USDT` : `${asset}ETH`;
         const symbol = exchange.symbols.find(exchangeSymbol => exchangeSymbol.name === selectedCoin);
         const formattedPrices = formatPrices(symbol.prices);
         this.setState({ linechartData: formattedPrices, selectedCoin });
     }
+
+    displayPrices = (symbol) => {
+        const formattedPrices = formatPrices(symbol.prices);
+        this.setState({ linechartData: formattedPrices, selectedCoin: symbol.name });
+    };
 
     render() {
         const { classes, user, exchangesData, accountInfo } = this.props;
@@ -98,18 +107,31 @@ class Dashboard extends React.Component {
                                 <div>Account info</div>
                                 <div>
                                     {accountInfo[exchange.name].balances.map(item =>
-                                        item.free > 0.001 ? (
+                                        (item.free > 0.001 || item.locked > 0.001) ? (
                                             <div key={`${exchange.name}-${item.asset}`}>
                                                 <div
                                                     className={classes.balanceItem}
                                                     onClick={() => this.selectValue(exchange, item.asset)}
                                                 >
-                                                    <span>{item.asset}: </span>
-                                                    <span>{item.free}</span>
+                                                    <div>{item.asset}: </div>
+                                                    <div>{item.free}</div>
+                                                    <div>{item.locked}</div>
                                                 </div>
                                                 <div>
                                                     <span>Buy price: </span>
                                                     <span>{this.getDealPrice(accountInfo[exchange.name].orders, item.asset)}</span>
+                                                </div>
+                                                <div>
+                                                    <span>Current price: </span>
+                                                    <div>
+                                                        {this.getCurrentPrice(exchange, item.asset)}
+                                                    </div>
+                                                    <div>
+                                                        ${this.getCurrentPriceDollars(item.asset === 'ETH', exchange, item.free, this.getCurrentPrice(exchange, item.asset))}
+                                                    </div>
+                                                    <div>
+                                                        ${this.getCurrentPriceDollars(item.asset === 'ETH', exchange, item.locked, this.getCurrentPrice(exchange, item.asset))} (locked)
+                                                    </div>
                                                 </div>
                                             </div>
                                         ) : null)}

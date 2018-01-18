@@ -6,7 +6,7 @@ const Symbol = require('../models/Symbol/Symbol');
 const updateExchange = async ({ symbols, exchange }) => {
     exchange.symbols = symbols.map(symbol => symbol._id);
     const now = Date.now();
-    await exchange.save();
+    exchange.save();
     console.log(`Binance exchange symbols updated in ${Date.now() - now}ms`);
 };
 
@@ -25,7 +25,7 @@ const updateSymbols = async ({ prices, keys }) => {
     }
     const symbols = await Promise.all(promises);
     console.log(`Binance exchange prices updated in ${Date.now() - time}ms`);
-    await updateExchange({ symbols, exchange });
+    updateExchange({ symbols, exchange });
 };
 
 const getData = async () => {
@@ -33,7 +33,7 @@ const getData = async () => {
     const clientBinance = binance.default();
     const prices = await clientBinance.prices();
     const keys = Object.keys(prices);
-    await updateSymbols({ prices, keys });
+    updateSymbols({ prices, keys });
     console.log('Refresh Binance data: OK');
 };
 
@@ -44,22 +44,24 @@ const getAccountInfo = async ({ credentials }) => {
     const promises = [];
     try {
         accountInfo = await clientBinance.accountInfo();
+        accountInfo.balances.filter(item => (item.free > 0.001 || item.locked > 0.001)).map((balanceItem) => {
+            const symbol = balanceItem.asset === 'ETH' || balanceItem.asset === 'BTC' ? `${balanceItem.asset}USDT` : `${balanceItem.asset}ETH`;
+            return promises.push(clientBinance.allOrders({ symbol }));
+        });
+        try {
+            accountInfo.orders = await Promise.all(promises);
+            accountInfo.orders = accountInfo.orders
+                .map(order => order.filter(item => item.side === 'BUY'))
+                .map(itemMapArray => itemMapArray.map(itemMap => ({ ...itemMap, dealPrice: itemMap.price, pair: itemMap.symbol })));
+            return Promise.resolve(accountInfo);
+        } catch (error) {
+            console.log(error);
+            return Promise.reject(error);
+        }
     } catch (error) {
-        console.log(error);
+        console.log('Binance.getAccountInfo:', error);
+        return Promise.reject(error);
     }
-    accountInfo.balances.filter(item => item.free > 0.001).map((balanceItem) => {
-        const symbol = balanceItem.asset === 'ETH' || balanceItem.asset === 'BTC' ? `${balanceItem.asset}USDT` : `${balanceItem.asset}ETH`;
-        return promises.push(clientBinance.allOrders({ symbol }));
-    });
-    try {
-        accountInfo.orders = await Promise.all(promises);
-        accountInfo.orders = accountInfo.orders
-            .map(order => order.filter(item => item.side === 'BUY'))
-            .map(itemMapArray => itemMapArray.map(itemMap => ({ ...itemMap, dealPrice: itemMap.price, pair: itemMap.symbol })));
-    } catch (error) {
-        console.log(error);
-    }
-    return accountInfo;
 };
 
 
