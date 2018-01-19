@@ -62,9 +62,12 @@ class Dashboard extends React.Component {
         return result ? result.prices[result.prices.length - 1].value : 0;
     }
     getCurrentPriceDollars = (isEth, exchange, quantity, currentPrice) => {
+        console.log(isEth, exchange, quantity, currentPrice);
         const result = exchange.symbols.find(item => item.name === 'ETHUSDT');
         const price = result ? result.prices[result.prices.length - 1].value : 0;
-        return isEth ? price * quantity : price * quantity * currentPrice;
+        const resultPrice = isEth ? price * quantity : price * quantity * currentPrice;
+        console.log(resultPrice);
+        return resultPrice;
     }
 
     getDealPrice = (orders, asset) => {
@@ -75,6 +78,35 @@ class Dashboard extends React.Component {
         }
         return 'N/A';
     }
+
+    getDiff = (isEth, exchange, free, locked, currentPrice, buyPrice) => {
+        const result = exchange.symbols.find(item => item.name === 'ETHUSDT');
+        const price = result ? result.prices[result.prices.length - 1].value : 0;
+        const quantity = Number.parseFloat(locked || 0) + Number.parseFloat(free || 0);
+        const buyPriceUsd = price * quantity * buyPrice;
+        const currentPriceUsd = price * quantity * currentPrice;
+        console.log(quantity, price, buyPriceUsd, currentPriceUsd);
+        const priceDiff = currentPriceUsd - buyPriceUsd;
+        return isEth ? 0 : priceDiff;
+    }
+
+    getTotal = (exchangesData, accountInfo) => exchangesData.reduce((a, b) => {
+        const c = accountInfo[b.name].balances.map((item) => {
+            console.log(item);
+            console.log(this.getCurrentPrice(b, item.asset));
+            const test = (item.free > 0.001 || item.locked > 0.001) ?
+                this.getCurrentPriceDollars(
+                    item.asset === 'ETH',
+                    b,
+                    Number.parseFloat(item.locked || 0) + Number.parseFloat(item.free || 0),
+                    this.getCurrentPrice(b, item.asset),
+                ) : 0;
+            console.log(test);
+            return Number.parseFloat(test);
+        }).reduce((e, f) => e + f, 0);
+        console.log(a, c, Number.parseFloat(a + c));
+        return Number.parseFloat(a + c);
+    }, 0);
 
     selectValue = (exchange, asset) => {
         const selectedCoin = asset === 'ETH' || asset === 'BTC' ? `${asset}USDT` : `${asset}ETH`;
@@ -99,6 +131,7 @@ class Dashboard extends React.Component {
                     Exchanges:
                     {user.exchanges.map(exchange => <div key={`${exchange.name}title`}>{exchange.name}</div>)}
                 </div>
+                <div>{this.getTotal(exchangesData, accountInfo)}</div>
                 <div className={classes.exchanges}>
                     {exchangesData.map(exchange => (
                         <div key={`${exchange.name}data`} className={classes.exchange}>
@@ -131,6 +164,15 @@ class Dashboard extends React.Component {
                                                     </div>
                                                     <div>
                                                         ${this.getCurrentPriceDollars(item.asset === 'ETH', exchange, item.locked, this.getCurrentPrice(exchange, item.asset))} (locked)
+                                                    </div>
+                                                    <div>
+                                                        Diff : {this.getDiff(
+                                                            item.asset === 'ETH', exchange,
+                                                            item.free,
+                                                            item.locked,
+                                                            this.getCurrentPrice(exchange, item.asset),
+                                                            this.getDealPrice(accountInfo[exchange.name].orders, item.asset),
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
