@@ -7,6 +7,7 @@ const mongoSession = require('mongoose-express-session');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const security = require('./src/passport/security');
 const localStrategy = require('./src/passport/localStrategy');
@@ -48,6 +49,7 @@ app.use(session({
 passport.use(localStrategy);
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(compression());
 
 // app.use('/', express.static(path.join(__dirname, './src/public/index.html')));
 // app.use('/assets', express.static(path.join(__dirname, './assets')));
@@ -89,6 +91,6 @@ app.get('/getApiParams', (_, res) => {
 app.listen(PORT, async () => {
     setInterval(() => {
         exchangesHandler.getData();
-    }, 10000);
+    }, 5000);
     console.log(`Backend runing on port : ${PORT}`);
 });

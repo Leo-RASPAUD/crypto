@@ -1,4 +1,4 @@
-const Exchange = require('../models/Exchange/Exchange');
+const Price = require('../models/Price/Price');
 
 const sortByName = (a, b) => {
     if (a.name < b.name) {
@@ -13,7 +13,7 @@ const sortByName = (a, b) => {
 const list = async (req, res) => {
     let exchanges;
     try {
-        exchanges = await Exchange.find();
+        exchanges = await Price.find({ distinct: 'exchange' });
         return res.send(exchanges);
     } catch (error) {
         console.log(`Error while trying to get the exchanges ${error}`);
@@ -22,15 +22,25 @@ const list = async (req, res) => {
 };
 
 const getSymbols = async (req, res) => {
-    let exchange;
     const exchangeName = req.params.name;
     try {
-        exchange = await Exchange.findOne({ name: exchangeName }).populate('symbols');
-        exchange.symbols.sort(sortByName);
-        return res.send(exchange);
+        const prices = await Price.find({ exchange: exchangeName });
+        const symbols = [];
+        const { length } = prices;
+        for (let index = 0; index < length; index += 1) {
+            const element = prices[index];
+            const symbolName = element.symbol;
+            const isPresent = symbols.find(symbol => symbol.name === symbolName);
+            if (!isPresent) {
+                symbols.push({ name: symbolName, prices: [{ value: element.value, time: element.time }] });
+            } else {
+                isPresent.prices.push({ value: element.value, time: element.time });
+            }
+        }
+        res.send({ symbols: symbols.sort(sortByName), name: exchangeName });
     } catch (error) {
-        console.log(`Error while trying to get the exchange ${exchangeName} ${error}`);
-        return res.status(500).json({ _error: `Error code : ${error.code}` });
+        console.log(`Error while trying to get the symbols ${exchangeName} ${error}`);
+        res.sendStatus(500).json({ _error: `Error code : ${error.code}` });
     }
 };
 
