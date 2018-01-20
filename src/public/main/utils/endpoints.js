@@ -4,11 +4,12 @@ const baseExchange = '/exchange';
 const userEndpoints = {
     login: '/login',
     getUserDetails: id => `${baseUser}/${id}`,
-    getAccountInfo: id => `${baseUser}/${id}/accountInfo`,
 };
 
 const exchangeEndpoints = {
-    getSymbols: name => `${baseExchange}/${name}`,
+    getSymbols: name => `${baseExchange}/${name}/Symbol`,
+    getAccountInfo: name => `${baseExchange}/${name}/accountInformations`,
+    getPrices: ({ exchangeName, symbol }) => `${baseExchange}/${exchangeName}/Price/${symbol}`,
 };
 
 export default {

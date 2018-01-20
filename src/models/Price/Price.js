@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 
 const priceSchema = new mongoose.Schema({
-    time: Date,
-    value: '',
     exchange: '',
-    symbol: '',
+    time: Date,
+    symbols: [{
+        name: '',
+        value: '',
+    }],
 });
 
 module.exports = mongoose.model('Price', priceSchema);

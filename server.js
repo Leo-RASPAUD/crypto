@@ -66,9 +66,10 @@ app.post('/login', userEndpoints.login);
 app.get('/user', security.isAuthenticated, userEndpoints.listUsers);
 app.post('/createUser', userEndpoints.createUser);
 app.get('/user/:id', security.isAuthenticated, userEndpoints.getUserDetails);
-app.get('/user/:id/accountInfo', security.isAuthenticated, userEndpoints.getAccountInfo);
 app.get('/exchange', security.isAuthenticated, exchangesEndpoints.list);
-app.get('/exchange/:name', security.isAuthenticated, exchangesEndpoints.getSymbols);
+app.get('/exchange/:name/Symbol', security.isAuthenticated, exchangesEndpoints.getSymbols);
+app.post('/exchange/:name/accountInformations', security.isAuthenticated, exchangesEndpoints.getAccountInfo);
+app.get('/exchange/:name/Price/:symbol', security.isAuthenticated, exchangesEndpoints.getPrices);
 
 app.get('/getApiParams', (_, res) => {
     res.send({
@@ -91,6 +92,6 @@ app.get('/getApiParams', (_, res) => {
 app.listen(PORT, async () => {
     setInterval(() => {
         exchangesHandler.getData();
-    }, 5000);
+    }, 10000);
     console.log(`Backend runing on port : ${PORT}`);
 });

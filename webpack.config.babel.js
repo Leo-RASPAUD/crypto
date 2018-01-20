@@ -44,6 +44,7 @@ const config = {
             webpackRules.babelLoaderRule,
             webpackRules.eslintLoaderRule,
             webpackRules.cssLoaderRule,
+            webpackRules.fileLoaderRule,
         ],
     },
 };

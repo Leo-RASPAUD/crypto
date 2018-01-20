@@ -75,32 +75,10 @@ const getUserDetails = async (req, res) => {
     }
 };
 
-const getAccountInfo = async (req, res) => {
-    let user;
-    try {
-        user = await User.findOne({ _id: req.params.id });
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ message: `Error code : ${error.code}` });
-    }
-    const isBinance = user.exchanges.find(exchange => exchange.name === 'Binance');
-    const isKucoin = user.exchanges.find(exchange => exchange.name === 'Kucoin');
-    const promises = [];
-    if (isBinance) {
-        promises.push(binance.getAccountInfo({ credentials: isBinance }));
-    }
-    if (isKucoin) {
-        promises.push(kucoin.getAccountInfo({ credentials: isKucoin }));
-    }
-    const [Binance, Kucoin] = await Promise.all(promises);
-    return res.send({ Binance, Kucoin });
-};
-
 module.exports = {
     addExchange,
     createUser,
     listUsers,
     login,
     getUserDetails,
-    getAccountInfo,
 };

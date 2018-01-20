@@ -1,21 +1,29 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import { push } from 'react-router-redux';
+import paths from 'components/App/App.paths';
 import App from './App.component';
 import states from './App.states';
 
 const mapStateToProps = state => ({
     authenticated: state.app.userAuthenticated,
-    loadingUser: state.app.loadingUser,
 });
 
 const mapDispatchToProps = dispatch => ({
-    setUser: ({ user, loadingUser, exchanges, accountInfo }) => dispatch({
-        type: states.RECEIVE_CHECK_USER_TOKEN,
-        user,
-        loadingUser,
-        exchanges,
-        accountInfo,
-    }),
+    redirectToLogin: () => {
+        dispatch({
+            type: states.CRYPTO_REDIRECT_TO_LOGIN,
+            loadingApp: false,
+        });
+        dispatch(push(paths.public.login));
+    },
+    goToLoading: () => {
+        dispatch({
+            type: states.CRYPTO_GO_TO_LOADING,
+            loadingApp: true,
+        });
+        dispatch(push(paths.public.loading));
+    },
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

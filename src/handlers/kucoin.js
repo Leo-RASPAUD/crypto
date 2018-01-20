@@ -6,10 +6,25 @@ const getData = async () => {
     const time = Date.now();
     const kc = new Kucoin();
     const prices = await kc.getTicker({ pair: '' });
-    await Promise.all(prices.data.map(price => new Promise(async (resolve) => {
-        const newPrice = new Price({ symbol: price.symbol.replace('-', ''), value: price.lastDealPrice, time, exchange: 'Kucoin' });
-        resolve(newPrice.save());
-    })));
+    const { length } = prices.data;
+
+    const priceObject = {
+        exchange: 'Kucoin',
+        time,
+        symbols: [],
+    };
+
+    for (let index = 0; index < length; index += 1) {
+        const element = prices.data[index];
+        priceObject.symbols.push({
+            name: element.symbol.replace('-', ''),
+            value: element.lastDealPrice,
+        });
+    }
+
+    const price = new Price(priceObject);
+    price.save();
+
     console.log(`Kucoin data updated in ${Date.now() - time}ms`);
 };
 

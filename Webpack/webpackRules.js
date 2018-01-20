@@ -18,6 +18,18 @@ const babelLoaderRule = {
     }],
 };
 
+const fileLoaderRule = {
+    test: /\.(ttf|woff|woff2|eot|gif|png|svg|jpg)$/,
+    use: [
+        {
+            loader: 'file-loader',
+            options: {
+                name: '[hash]-[name].[ext]',
+            },
+        },
+    ],
+};
+
 const cssLoaderRule = {
     test: /\.css$/,
     use: ['style-loader', 'css-loader'],
@@ -34,4 +46,5 @@ export default {
     babelLoaderRule,
     eslintLoaderRule,
     cssLoaderRule,
+    fileLoaderRule,
 };

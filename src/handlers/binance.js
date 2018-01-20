@@ -1,6 +1,4 @@
 const binance = require('binance-api-node');
-// const Exchange = require('../models/Exchange/Exchange');
-// const Symbol = require('../models/Symbol/Symbol');
 const Price = require('../models/Price/Price');
 
 const getData = async () => {
@@ -9,10 +7,23 @@ const getData = async () => {
     const clientBinance = binance.default();
     const prices = await clientBinance.prices();
     const symbolKeys = Object.keys(prices);
-    await Promise.all(symbolKeys.map(symbolKey => new Promise(async (resolve) => {
-        const price = new Price({ symbol: symbolKey, value: prices[symbolKey], time, exchange: 'Binance' });
-        resolve(price.save());
-    })));
+    const { length } = symbolKeys;
+
+    const priceObject = {
+        exchange: 'Binance',
+        time,
+        symbols: [],
+    };
+    for (let index = 0; index < length; index += 1) {
+        const element = symbolKeys[index];
+        priceObject.symbols.push({
+            name: element,
+            value: prices[element],
+        });
+    }
+
+    const price = new Price(priceObject);
+    price.save();
     console.log(`Binance data updated in ${Date.now() - time}ms`);
 };
 

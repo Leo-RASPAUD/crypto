@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import compose from 'recompose/compose';
 import Button from 'material-ui/Button';
+import Paper from 'material-ui/Paper';
 import FormTextFieldComponent from 'components/Commons/FormTextField/FormTextField.component';
 import labels from './Login.labels';
 import styles from './Login.style';
@@ -29,33 +30,38 @@ class Login extends React.Component {
             error,
         } = this.props;
         return (
-            <form onSubmit={handleSubmit(submitLogin)} className={classes.loginForm}>
-                <Field
-                    name="email"
-                    margin="dense"
-                    component={FormTextFieldComponent}
-                    type="text"
-                    label={labels.username}
-                    autoFocus
-                    required
-                    fullWidth
-                />
-                <Field
-                    name="password"
-                    margin="dense"
-                    component={FormTextFieldComponent}
-                    type="password"
-                    label={labels.password}
-                    required
-                    fullWidth
-                />
-                <Button raised color="primary" type="submit">
-                    {labels.submit}
-                </Button>
-                <div className={classes.errorMessage}>
-                    {error}
-                </div>
-            </form>
+            <div className={classes.loginWrapper}>
+                <Paper className={classes.paperWrapper}>
+                    <div className={classes.loginHeader} />
+                    <form onSubmit={handleSubmit(submitLogin)} className={classes.paperForm}>
+                        <Field
+                            name="email"
+                            margin="dense"
+                            component={FormTextFieldComponent}
+                            type="text"
+                            label={labels.username}
+                            autoFocus
+                            required
+                            fullWidth
+                        />
+                        <Field
+                            name="password"
+                            margin="dense"
+                            component={FormTextFieldComponent}
+                            type="password"
+                            label={labels.password}
+                            required
+                            fullWidth
+                        />
+                        <Button raised color="primary" type="submit">
+                            {labels.submit}
+                        </Button>
+                        <div className={classes.errorMessage}>
+                            {error}
+                        </div>
+                    </form>
+                </Paper>
+            </div>
         );
     }
 }
