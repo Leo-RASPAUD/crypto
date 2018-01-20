@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import { CircularProgress } from 'material-ui/Progress';
 import Icon from 'material-ui/Icon';
+import Typography from 'material-ui/Typography';
 
 import styles from './LoadingApp.style';
+import labels from './LoadingApp.labels';
 
 @withStyles(styles)
 class LoadingApp extends React.Component {
@@ -70,14 +72,23 @@ class LoadingApp extends React.Component {
                             <div className="cssload-shaft9" />
                             <div className="cssload-shaft10" />
                         </div>
-                        <div>
-                            Loading user data : {this.state.loadingUserData ? <CircularProgress /> : <Icon>check</Icon>}
+                        <div className={classes.loadingItem}>
+                            <Typography color="inherit" className={classes.loadingLabel}>
+                                {labels.loadingUserData}
+                            </Typography>
+                            {this.state.loadingUserData ?
+                                <CircularProgress size={24} style={{ paddingLeft: 15 }} /> :
+                                <Icon style={{ color: '#4caf50', paddingLeft: 15 }}>check</Icon>}
                         </div>
                         <div>
                             {this.state.exchanges.length > 0 && this.state.exchanges.map(exchange => (
-                                <div key={exchange.name}>
-                                    <span>Loading {exchange.name}</span>
-                                    {exchange.loading ? <CircularProgress /> : <Icon>check</Icon>}
+                                <div key={exchange.name} className={classes.loadingItem}>
+                                    <Typography color="inherit" className={classes.loadingLabel}>
+                                        {labels.loading} {exchange.name}:
+                                    </Typography>
+                                    {exchange.loading ?
+                                        <CircularProgress size={24} style={{ paddingLeft: 15 }} /> :
+                                        <Icon style={{ color: '#4caf50', paddingLeft: 15 }}>check</Icon>}
                                 </div>
                             ))}
                         </div>

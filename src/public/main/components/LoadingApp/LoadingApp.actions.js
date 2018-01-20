@@ -22,11 +22,16 @@ const loadUserDetails = () => async (dispatch) => {
     dispatch({ type: states.CRYPTO_REQUEST_LOAD_USER_DETAILS });
     try {
         const userId = window.localStorage.getItem(localStorageConstants.userId);
-        const { json } = await userService.getUserDetails(userId);
+        const { status, json } = await userService.getUserDetails(userId);
+        if (status !== 200) {
+            console.log(status);
+            dispatch(push(paths.public.login));
+        }
         dispatch({ type: states.CRYPTO_REQUEST_LOAD_USER_DETAILS_SUCCESS, user: json });
         return json;
     } catch (error) {
         console.error(error);
+        dispatch(push(paths.public.login));
         return null;
     }
 };
