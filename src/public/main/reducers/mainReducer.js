@@ -11,4 +11,13 @@ const mainReducer = combineReducers({
     form: formReducer,
 });
 
-export default mainReducer;
+/* eslint-disable no-param-reassign */
+const rootReducer = (state, action) => {
+    if (action.type === 'REQUEST_LOGOUT') {
+        state = undefined;
+    }
+    return mainReducer(state, action);
+};
+
+
+export default rootReducer;
