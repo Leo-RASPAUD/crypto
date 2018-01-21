@@ -70,6 +70,8 @@ app.get('/exchange', security.isAuthenticated, exchangesEndpoints.list);
 app.get('/exchange/:name/Symbol', security.isAuthenticated, exchangesEndpoints.getSymbols);
 app.post('/exchange/:name/accountInformations', security.isAuthenticated, exchangesEndpoints.getAccountInfo);
 app.get('/exchange/:name/Price/:symbol', security.isAuthenticated, exchangesEndpoints.getPrices);
+app.get('/exchange/:name/Price/:symbol/Trend', security.isAuthenticated, exchangesEndpoints.getTrendInEth);
+app.get('/exchange/:name/Price/:symbol/lastPrice', security.isAuthenticated, exchangesEndpoints.getLastPrice);
 
 app.get('/getApiParams', (_, res) => {
     res.send({

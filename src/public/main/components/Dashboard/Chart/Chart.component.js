@@ -26,18 +26,14 @@ class Chart extends React.Component {
             lastPrice = prices[prices.length - 1].value;
         }
         let cssClass;
-        let color;
         let icon;
         if (lastPrice > previousPrice) {
-            color = '#4caf50';
             cssClass = 'trendingUp';
             icon = 'trending_up';
         } else if (lastPrice < previousPrice) {
-            color = '#f44336';
             cssClass = 'trendingDown';
             icon = 'trending_down';
         } else {
-            color = '#607d8b';
             cssClass = 'trendingFlat';
             icon = 'trending_flat';
         }
@@ -47,7 +43,7 @@ class Chart extends React.Component {
                     <div style={{ flex: 1 }}>{symbol}</div>
                     <div className={classes[cssClass]} >
                         {lastPrice}
-                        <Icon style={{ color, marginLeft: 10 }}>
+                        <Icon style={{ marginLeft: 10 }}>
                             {icon}
                         </Icon>
                     </div>

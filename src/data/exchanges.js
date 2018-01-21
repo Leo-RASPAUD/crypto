@@ -1,6 +1,17 @@
 const Price = require('../models/Price/Price');
 const exchangeUtils = require('./utils/exchangeUtils');
 
+const createPriceObject = prices => prices.map((item) => {
+    const isItem = item.items[0];
+    const date = new Date(item.time);
+    const formattedDate = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    if (isItem) {
+        return { value: Number.parseFloat(isItem.value), time: formattedDate };
+    }
+    return { time: item.time, value: 0 };
+});
+
+
 const list = async (req, res) => {
     let exchanges;
     try {
@@ -42,17 +53,63 @@ const getPrices = async (req, res) => {
                 },
             },
         ]);
+        res.send({ symbol, prices: createPriceObject(prices) });
+    } catch (error) {
+        console.log(`Error while trying to get the symbols ${name} ${error}`);
+        res.sendStatus(500).json({ _error: `Error code : ${error.code}` });
+    }
+};
 
-        const priceObject = prices.map((item) => {
-            const isItem = item.items[0];
-            const date = new Date(item.time);
-            const formattedDate = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-            if (isItem) {
-                return { value: Number.parseFloat(isItem.value), time: formattedDate };
-            }
-            return { time: item.time, value: 0 };
-        });
-        res.send({ symbol, prices: priceObject });
+/* eslint-disable no-confusing-arrow */
+const getTrendInEth = async (req, res) => {
+    const { name, symbol } = req.params;
+    try {
+        const prices = await Price.aggregate([
+            { $match: { exchange: name } },
+            {
+                $project: {
+                    items: {
+                        $filter: {
+                            input: '$symbols',
+                            as: 'symbol',
+                            cond: { $eq: ['$$symbol.name', symbol] },
+                        },
+                    },
+                    time: '$time',
+                },
+            },
+            { $sort: { time: -1 } },
+            { $limit: 2 },
+        ]);
+        res.send({ symbol, prices: createPriceObject(prices) });
+    } catch (error) {
+        console.log(`Error while trying to get the symbols ${name} ${error}`);
+        res.sendStatus(500).json({ _error: `Error code : ${error.code}` });
+    }
+};
+
+/* eslint-disable no-confusing-arrow */
+const getLastPrice = async (req, res) => {
+    const { name, symbol } = req.params;
+    try {
+        const prices = await Price.aggregate([
+            { $match: { exchange: name } },
+            {
+                $project: {
+                    items: {
+                        $filter: {
+                            input: '$symbols',
+                            as: 'symbol',
+                            cond: { $eq: ['$$symbol.name', symbol] },
+                        },
+                    },
+                    time: '$time',
+                },
+            },
+            { $sort: { time: -1 } },
+            { $limit: 1 },
+        ]);
+        res.send({ symbol, prices: createPriceObject(prices)[0].value });
     } catch (error) {
         console.log(`Error while trying to get the symbols ${name} ${error}`);
         res.sendStatus(500).json({ _error: `Error code : ${error.code}` });
@@ -74,5 +131,7 @@ module.exports = {
     list,
     getSymbols,
     getPrices,
+    getTrendInEth,
     getAccountInfo,
+    getLastPrice,
 };

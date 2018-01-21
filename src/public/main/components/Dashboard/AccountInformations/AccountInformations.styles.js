@@ -1,3 +1,9 @@
+const trending = {
+    marginRight: 15,
+    display: 'flex',
+    alignItems: 'center',
+};
+
 export default () => ({
     symbolTable: {
         width: 150,
@@ -49,5 +55,17 @@ export default () => ({
         position: 'absolute',
         zIndex: 2,
         marginRight: 5,
+    },
+    trendingUp: {
+        ...trending,
+        color: '#4caf50',
+    },
+    trendingDown: {
+        ...trending,
+        color: '#f44336',
+    },
+    trendingFlat: {
+        ...trending,
+        color: '#607d8b',
     },
 });

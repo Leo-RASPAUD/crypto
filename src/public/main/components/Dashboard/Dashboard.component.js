@@ -16,6 +16,8 @@ class Dashboard extends React.Component {
         classes: PropTypes.object.isRequired,
         getSymbols: PropTypes.func.isRequired,
         getPrices: PropTypes.func.isRequired,
+        getTrend: PropTypes.func.isRequired,
+        getLastPrice: PropTypes.func.isRequired,
         accountInformations: PropTypes.array.isRequired,
     };
 
@@ -45,7 +47,7 @@ class Dashboard extends React.Component {
     }
 
     render() {
-        const { classes, accountInformations } = this.props;
+        const { classes, accountInformations, getTrend, getLastPrice } = this.props;
         return (
             <div className={classes.root}>
                 <div>
@@ -54,12 +56,14 @@ class Dashboard extends React.Component {
                             <AccountInformations
                                 key={`accountInformations-${item.exchangeName}`}
                                 data={item}
+                                getTrend={getTrend}
+                                getLastPrice={getLastPrice}
                             />
                         ))}
                     </div>
                     <div style={{ display: 'flex' }}>
                         <div>
-                            {this.state.loadingSymbols && <CircularProgress />}
+                            {this.state.loadingSymbols && <CircularProgress style={{ margin: 25 }} />}
                             {!this.state.loadingSymbols && (
                                 <div className={classes.symbolTables}>
                                     {this.state.symbols.map(symbol => (

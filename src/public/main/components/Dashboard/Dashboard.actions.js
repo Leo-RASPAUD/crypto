@@ -29,8 +29,36 @@ const getPrices = ({ exchangeName, symbol }) => async () => {
     }
 };
 
+const getTrend = ({ exchangeName, symbol }) => async () => {
+    try {
+        const { json, status } = await exchangeService.getTrend({ exchangeName, symbol });
+        if (status !== 200) {
+            throw new Error('Error while getting the trends');
+        }
+        return json;
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+};
+
+const getLastPrice = ({ exchangeName, symbol }) => async () => {
+    try {
+        const { json, status } = await exchangeService.getLastPrice({ exchangeName, symbol });
+        if (status !== 200) {
+            throw new Error('Error while getting the last price');
+        }
+        return json;
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+};
+
 export default {
     getSymbols,
     getPrices,
+    getTrend,
+    getLastPrice,
 };
 

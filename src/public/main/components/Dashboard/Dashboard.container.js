@@ -13,6 +13,8 @@ const mergeProps = (state, { dispatch }, { ...otherProps }) => ({
     ...state,
     getSymbols: () => dispatch(actions.getSymbols(state.exchanges)),
     getPrices: ({ exchangeName, symbol }) => dispatch(actions.getPrices({ exchangeName, symbol })),
+    getLastPrice: ({ exchangeName, symbol }) => dispatch(actions.getLastPrice({ exchangeName, symbol })),
+    getTrend: ({ exchangeName, symbol }) => dispatch(actions.getTrend({ exchangeName, symbol })),
 });
 
 export default withRouter(connect(mapStateToProps, null, mergeProps)(Dashboard));
