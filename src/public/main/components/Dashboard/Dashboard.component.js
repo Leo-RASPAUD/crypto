@@ -47,7 +47,12 @@ class Dashboard extends React.Component {
     }
 
     render() {
-        const { classes, accountInformations, getTrend, getLastPrice } = this.props;
+        const {
+            classes,
+            accountInformations,
+            getTrend,
+            getLastPrice,
+        } = this.props;
         return (
             <div className={classes.root}>
                 <div>
@@ -58,6 +63,7 @@ class Dashboard extends React.Component {
                                 data={item}
                                 getTrend={getTrend}
                                 getLastPrice={getLastPrice}
+                                displayPrices={this.displayPrices}
                             />
                         ))}
                     </div>

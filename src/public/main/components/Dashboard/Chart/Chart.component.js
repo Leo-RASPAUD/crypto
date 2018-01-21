@@ -53,7 +53,7 @@ class Chart extends React.Component {
                         <Line dot={false} type="monotone" dataKey="value" stroke="#8884d8" />
                         <CartesianGrid stroke="#ccc" />
                         <XAxis dataKey="time" />
-                        <YAxis dataKey="value" width={100} domain={['auto', 'auto']} />
+                        <YAxis dataKey="value" width={100} />
                         <Tooltip />
                     </LineChart>
                 </div>

@@ -18,6 +18,7 @@ class AccountInformations extends React.Component {
         data: PropTypes.object.isRequired,
         getTrend: PropTypes.func.isRequired,
         getLastPrice: PropTypes.func.isRequired,
+        displayPrices: PropTypes.func.isRequired,
     };
 
     state = {
@@ -25,25 +26,19 @@ class AccountInformations extends React.Component {
     }
 
     componentDidMount = async () => {
-        const { getTrend, data, getLastPrice } = this.props;
-        const resultLastPrice = await getLastPrice({ exchangeName: data.exchangeName, symbol: 'ETHUSDT' });
-        const lastEthPrice = resultLastPrice.prices;
-        const { length } = this.state.displayedItems;
-        for (let index = 0; index < length; index += 1) {
-            const element = this.state.displayedItems[index];
-            let symbol = 'ETHUSDT';
-            if (element.balance.asset !== 'ETH') {
-                symbol = `${element.balance.asset}ETH`;
-            }
-            getTrend({ exchangeName: data.exchangeName, symbol }).then(this.setElementTrend({ element, lastEthPrice }));
-        }
+        this.refreshValues();
+        this.interval = setInterval(this.refreshValues, 10000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     /* eslint-disable no-param-reassign */
     setElementTrend = ({ element, lastEthPrice }) => (trend) => {
         const { prices } = trend;
         const previousPrice = prices[0].value;
-        const lastPrice = prices[0].value;
+        const lastPrice = prices[1].value;
         let cssClass;
         let icon;
         if (lastPrice > previousPrice) {
@@ -67,16 +62,38 @@ class AccountInformations extends React.Component {
         this.setState({ displayedItems: this.state.displayedItems });
     };
 
+    refreshValues = async () => {
+        this.setState({ displayedItems: this.state.displayedItems.map(item => ({ ...item, loading: true })) });
+        const { getTrend, data, getLastPrice } = this.props;
+        const resultLastPrice = await getLastPrice({ exchangeName: data.exchangeName, symbol: 'ETHUSDT' });
+        const lastEthPrice = resultLastPrice.prices;
+        const { length } = this.state.displayedItems;
+        for (let index = 0; index < length; index += 1) {
+            const element = this.state.displayedItems[index];
+            let symbol = 'ETHUSDT';
+            if (element.balance.asset !== 'ETH') {
+                symbol = `${element.balance.asset}ETH`;
+            }
+            getTrend({ exchangeName: data.exchangeName, symbol }).then(this.setElementTrend({ element, lastEthPrice }));
+        }
+    }
+
+
+    /* eslint-disable jsx-a11y/click-events-have-key-events */
     render() {
-        const { classes, data } = this.props;
+        const { classes, data, displayPrices } = this.props;
         return (
-            <Paper className={classes.paperWrapper} >
+            <Paper className={classes.paperWrapper}>
                 <div className={classes.title}>{data.exchangeName}</div>
                 <div className={classes.assetWrapper} >
                     {this.state.displayedItems.map(item => (
                         <div
                             className={classes.asset}
                             key={item.balance.asset}
+                            onClick={() => displayPrices({
+                                exchangeName: data.exchangeName,
+                                symbol: item.balance.asset === 'ETH' ? `${item.balance.asset}USDT` : `${item.balance.asset}ETH`,
+                            })}
                         >
                             <div className={classes.iconWrapper}>
                                 <div style={{ position: 'relative' }}>

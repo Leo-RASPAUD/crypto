@@ -94,6 +94,6 @@ app.get('/getApiParams', (_, res) => {
 app.listen(PORT, async () => {
     setInterval(() => {
         exchangesHandler.getData();
-    }, 10000);
+    }, 30000);
     console.log(`Backend runing on port : ${PORT}`);
 });
