@@ -17,13 +17,9 @@ const conf = require('./conf/conf');
 const exchangesHandler = require('./src/handlers/exchanges');
 
 const app = express();
-const PORT = process.env.PORT || 8085;
-const DB_TYPE = process.env.DB_TYPE || 'mongodb';
-const HOST = process.env.HOST || 'localhost';
-const DB_PORT = process.env.DB_PORT || '54621';
-const DB_NAME = process.env.DB_NAME || 'crypto';
 
-mongoose.connect(`${DB_TYPE}://${HOST}:${DB_PORT}/${DB_NAME}`);
+
+mongoose.connect(`${conf.params.db_type}://${conf.params.host}:${conf.params.db_port}/${conf.params.db_name}`);
 const MongooseStore = mongoSession(session.Store);
 const mongoStore = new MongooseStore({ connection: mongoose });
 mongoose.Promise = global.Promise;
@@ -32,6 +28,7 @@ app.use(cors({
     origin: 'http://localhost:8082',
     credentials: true,
 }));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: '50mb' }));
 
@@ -51,14 +48,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(compression());
 
-// app.use('/', express.static(path.join(__dirname, './src/public/index.html')));
-// app.use('/assets', express.static(path.join(__dirname, './assets')));
-
-// const indexPath = path.join(__dirname, './src/public/index.html');
-
-// app.get('/', (_, res) => {
-//     res.sendFile(indexPath);
-// });
 
 // Endpoints
 app.post('/user/:id/addExchange', security.isAuthenticated, userEndpoints.addExchange);
@@ -75,25 +64,35 @@ app.get('/exchange/:name/Price/:symbol/lastPrice', security.isAuthenticated, exc
 
 app.get('/getApiParams', (_, res) => {
     res.send({
-        host: process.env.API_HOST || 'localhost:8085',
-        port: PORT,
+        host: conf.params.host,
+        port: conf.params.port,
     });
 });
 
-// app.get('*', (req, res) => {
-//     const file = req.path.split('/');
-//     if (req.originalUrl.match(/.*favicon.*png$/)) {
-//         res.sendFile(path.join(__dirname, './assets', `${file[file.length - 2]}/${file[file.length - 1]}`));
-//     } else if (req.originalUrl.match(/.*.(ttf|woff|woff2|png|svg|jpg|js|eot|gif|css)$/)) {
-//         res.sendFile(path.join(__dirname, './assets', file[file.length - 1]));
-//     } else {
-//         res.sendFile(indexPath);
-//     }
-// });
+app.use('/', express.static(path.join(__dirname, './src/public/index.html')));
+app.use('/assets', express.static(path.join(__dirname, './dist')));
 
-app.listen(PORT, async () => {
+const indexPath = path.join(__dirname, './src/public/index.html');
+
+app.get('/', (_, res) => {
+    res.sendFile(indexPath);
+});
+
+
+app.get('*', (req, res) => {
+    const file = req.path.split('/');
+    if (req.originalUrl.match(/.*favicon.*png$/)) {
+        res.sendFile(path.join(__dirname, './dist', `${file[file.length - 2]}/${file[file.length - 1]}`));
+    } else if (req.originalUrl.match(/.*.(ttf|woff|woff2|png|svg|jpg|js|eot|gif|css)$/)) {
+        res.sendFile(path.join(__dirname, './dist', file[file.length - 1]));
+    } else {
+        res.sendFile(indexPath);
+    }
+});
+
+app.listen(conf.params.port, async () => {
     setInterval(() => {
         exchangesHandler.getData();
     }, 30000);
-    console.log(`Backend runing on port : ${PORT}`);
+    console.log(`Backend runing on port : ${conf.params.port}`);
 });

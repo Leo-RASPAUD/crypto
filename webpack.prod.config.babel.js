@@ -22,10 +22,8 @@ const config = {
     entry: path.resolve(__dirname, './src/public/main/main.js'),
 
     output: {
-        path: path.join(__dirname, './assets'),
+        path: path.join(__dirname, './dist'),
         filename: 'index.js',
-        publicPath: '/assets',
-        sourceMapFilename: '[name].map',
     },
 
     plugins: [
