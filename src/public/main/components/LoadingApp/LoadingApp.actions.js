@@ -13,6 +13,7 @@ const getAccountInformations = ({ exchange }) => async (dispatch) => {
             resolve(json);
         } catch (error) {
             console.log('getAccountInformations', error);
+            dispatch(push(paths.public.login));
             reject(error);
         }
     });

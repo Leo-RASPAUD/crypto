@@ -4,9 +4,11 @@ import { push } from 'react-router-redux';
 import paths from 'components/App/App.paths';
 import App from './App.component';
 import states from './App.states';
+import actions from './App.actions';
 
 const mapStateToProps = state => ({
     authenticated: state.app.userAuthenticated,
+    user: state.app.user,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -24,6 +26,7 @@ const mapDispatchToProps = dispatch => ({
         });
         dispatch(push(paths.public.loading));
     },
+    logout: () => dispatch(actions.logout()),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
