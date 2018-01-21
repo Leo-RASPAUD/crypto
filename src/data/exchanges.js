@@ -47,10 +47,18 @@ const getPrices = async (req, res) => {
                             cond: { $eq: ['$$symbol.name', 'ETHUSDT'] },
                         },
                     },
+                    time: '$time',
                 },
             },
         ]);
-        res.send({ symbol, prices: prices.map(item => item.items[0] ? Number.parseFloat(item.items[0].value) : 0) });
+        const priceObject = prices.map((item) => {
+            const isItem = item.items[0];
+            if (isItem) {
+                return { value: Number.parseFloat(isItem.value), time: item.time };
+            }
+            return { time: item.time, value: 0 };
+        });
+        res.send({ symbol, prices: priceObject });
     } catch (error) {
         console.log(`Error while trying to get the symbols ${exchangeName} ${error}`);
         res.sendStatus(500).json({ _error: `Error code : ${error.code}` });
