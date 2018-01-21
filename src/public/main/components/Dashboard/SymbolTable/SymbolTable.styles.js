@@ -1,6 +1,6 @@
 export default () => ({
     symbolTable: {
-        width: 150,
+        width: 200,
         margin: 25,
         height: 400,
         overflowY: 'auto',

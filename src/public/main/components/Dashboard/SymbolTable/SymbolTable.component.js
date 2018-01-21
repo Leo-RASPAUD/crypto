@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
+import { CircularProgress } from 'material-ui/Progress';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 
@@ -13,7 +14,23 @@ class SymbolTable extends React.Component {
         classes: PropTypes.object.isRequired,
         symbol: PropTypes.object.isRequired,
         displayPrices: PropTypes.func.isRequired,
+        loadingPrices: PropTypes.bool.isRequired,
+        symbolLoading: PropTypes.string,
+        exchangeLoadingName: PropTypes.string,
     };
+
+    static defaultProps = {
+        symbolLoading: null,
+        exchangeLoadingName: null,
+    };
+
+    isSymbolLoading = (symbol, exchange) => {
+        const { symbolLoading, loadingPrices, exchangeLoadingName } = this.props;
+        if (loadingPrices && symbolLoading === symbol && exchange === exchangeLoadingName) {
+            return (<CircularProgress size={24} style={{ marginLeft: 5 }} />);
+        }
+        return null;
+    }
 
     render() {
         const { classes, symbol, displayPrices } = this.props;
@@ -22,7 +39,9 @@ class SymbolTable extends React.Component {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>{symbol.exchange}</TableCell>
+                            <TableCell style={{ fontSize: 18 }}>
+                                {symbol.exchange}
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -33,10 +52,13 @@ class SymbolTable extends React.Component {
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => displayPrices({
                                     exchangeName: symbol.exchange,
-                                    item,
+                                    symbol: item,
                                 })}
                             >
-                                <TableCell>{item}</TableCell>
+                                <TableCell style={{ alignItems: 'center' }}>
+                                    {item}
+                                    {this.isSymbolLoading(item, symbol.exchange)}
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

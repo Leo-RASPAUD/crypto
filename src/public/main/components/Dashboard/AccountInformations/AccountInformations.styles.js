@@ -10,10 +10,13 @@ export default () => ({
     },
     title: {
         fontSize: 18,
-        padding: 10,
         borderBottom: '1px solid rgba(235, 235, 235, 1)',
         color: 'rgba(0, 0, 0, 0.54)',
         fontWeight: 500,
+        height: 56,
+        display: 'flex',
+        alignItems: 'center',
+        paddingLeft: 25,
     },
     asset: {
         color: 'rgba(0, 0, 0, 0.75)',

@@ -3,7 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
+
 import SymbolTable from './SymbolTable/SymbolTable.component';
+import Chart from './Chart/Chart.component';
 import AccountInformations from './AccountInformations/AccountInformations.component';
 
 import styles from './Dashboard.styles';
@@ -19,7 +21,10 @@ class Dashboard extends React.Component {
 
     state = {
         loadingSymbols: true,
+        exchangeLoadingName: null,
+        symbolLoading: null,
         loadingPrices: false,
+        prices: null,
         symbols: [],
     }
 
@@ -33,8 +38,7 @@ class Dashboard extends React.Component {
     }
 
     displayPrices = ({ exchangeName, symbol }) => {
-        console.log(this.state.loadingPrices, this.state.prices);
-        this.setState({ loadingPrices: true });
+        this.setState({ loadingPrices: true, symbolLoading: symbol, exchangeLoadingName: exchangeName });
         this.props.getPrices({ exchangeName, symbol }).then((prices) => {
             this.setState({ prices, loadingPrices: false });
         });
@@ -53,18 +57,33 @@ class Dashboard extends React.Component {
                             />
                         ))}
                     </div>
-                    {this.state.loadingSymbols && <CircularProgress />}
-                    {!this.state.loadingSymbols && (
-                        <div className={classes.symbolTables}>
-                            {this.state.symbols.map(symbol => (
-                                <SymbolTable
-                                    key={`symbol-table-${symbol.exchange}`}
-                                    symbol={symbol}
-                                    displayPrices={this.displayPrices}
-                                />
-                            ))}
+                    <div style={{ display: 'flex' }}>
+                        <div>
+                            {this.state.loadingSymbols && <CircularProgress />}
+                            {!this.state.loadingSymbols && (
+                                <div className={classes.symbolTables}>
+                                    {this.state.symbols.map(symbol => (
+                                        <SymbolTable
+                                            key={`symbol-table-${symbol.exchange}`}
+                                            symbol={symbol}
+                                            displayPrices={this.displayPrices}
+                                            loadingPrices={this.state.loadingPrices}
+                                            symbolLoading={this.state.symbolLoading}
+                                            exchangeLoadingName={this.state.exchangeLoadingName}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </div>
-                    )}
+                        <div>
+                            {this.state.prices && (
+                                <Chart
+                                    symbol={this.state.prices.symbol}
+                                    prices={this.state.prices.prices}
+                                />
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
         );
