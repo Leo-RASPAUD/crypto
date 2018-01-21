@@ -18,6 +18,12 @@ const styles = () => ({
         margin: 5,
         cursor: 'pointer',
     },
+    symbolTables: {
+        display: 'flex',
+    },
+    accountInformationsWrapper: {
+        display: 'flex',
+    },
 });
 
 export default styles;

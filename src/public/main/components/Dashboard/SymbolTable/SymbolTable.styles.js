@@ -1,7 +1,4 @@
 export default () => ({
-    symbolTables: {
-        display: 'flex',
-    },
     symbolTable: {
         width: 150,
         margin: 25,

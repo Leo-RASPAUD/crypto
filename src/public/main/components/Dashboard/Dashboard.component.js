@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
 import SymbolTable from './SymbolTable/SymbolTable.component';
+import AccountInformations from './AccountInformations/AccountInformations.component';
 
 import styles from './Dashboard.styles';
 
@@ -43,32 +44,27 @@ class Dashboard extends React.Component {
         const { classes, accountInformations } = this.props;
         return (
             <div className={classes.root}>
-                Dashboard
                 <div>
+                    <div className={classes.accountInformationsWrapper} >
+                        {accountInformations.map(item => (
+                            <AccountInformations
+                                key={`accountInformations-${item.exchangeName}`}
+                                data={item}
+                            />
+                        ))}
+                    </div>
                     {this.state.loadingSymbols && <CircularProgress />}
                     {!this.state.loadingSymbols && (
                         <div className={classes.symbolTables}>
                             {this.state.symbols.map(symbol => (
                                 <SymbolTable
-                                    key={symbol.exchange}
+                                    key={`symbol-table-${symbol.exchange}`}
                                     symbol={symbol}
                                     displayPrices={this.displayPrices}
                                 />
                             ))}
                         </div>
                     )}
-                    <div>
-                        {accountInformations.map(item => (
-                            <div key={item.exchangeName}>
-                                <div>{item.exchangeName}</div>
-                                {item.data.balances.map(balance => (
-                                    <div key={balance.asset}>
-                                        {balance.free}
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-                    </div>
                 </div>
             </div>
         );

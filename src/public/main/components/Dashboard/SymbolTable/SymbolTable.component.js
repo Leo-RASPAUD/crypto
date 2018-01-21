@@ -28,7 +28,7 @@ class SymbolTable extends React.Component {
                     <TableBody>
                         {symbol.symbols.map(item => (
                             <TableRow
-                                key={item}
+                                key={`symbol-${item}`}
                                 hover
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => displayPrices({

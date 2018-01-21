@@ -14,6 +14,7 @@ import mainReducer from 'reducers/mainReducer';
 
 import 'assets/loader.css';
 import 'assets/materialIcons.css';
+import 'assets/cryptoIcons.css';
 import settings from './utils/settings';
 
 
