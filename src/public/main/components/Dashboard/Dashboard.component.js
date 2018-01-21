@@ -3,8 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import Paper from 'material-ui/Paper';
+import SymbolTable from './SymbolTable/SymbolTable.component';
 
 import styles from './Dashboard.styles';
 
@@ -14,6 +13,7 @@ class Dashboard extends React.Component {
         classes: PropTypes.object.isRequired,
         getSymbols: PropTypes.func.isRequired,
         getPrices: PropTypes.func.isRequired,
+        accountInformations: PropTypes.array.isRequired,
     };
 
     state = {
@@ -26,7 +26,6 @@ class Dashboard extends React.Component {
         const { getSymbols } = this.props;
         if (this.state.loadingSymbols) {
             getSymbols().then((symbols) => {
-                console.log(symbols);
                 this.setState({ symbols, loadingSymbols: false });
             });
         }
@@ -40,37 +39,8 @@ class Dashboard extends React.Component {
         });
     }
 
-    displaySymbols = (exchangeSymbols) => {
-        const { classes } = this.props;
-        return (
-            <Paper key={exchangeSymbols.exchange} className={classes.symbolTable}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>{exchangeSymbols.exchange}</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {exchangeSymbols.symbols.map(symbol => (
-                            <TableRow
-                                key={symbol}
-                                hover
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => this.displayPrices({
-                                    exchangeName: exchangeSymbols.exchange,
-                                    symbol,
-                                })}
-                            >
-                                <TableCell>{symbol}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </Paper>);
-    }
-
     render() {
-        const { classes } = this.props;
+        const { classes, accountInformations } = this.props;
         return (
             <div className={classes.root}>
                 Dashboard
@@ -78,9 +48,27 @@ class Dashboard extends React.Component {
                     {this.state.loadingSymbols && <CircularProgress />}
                     {!this.state.loadingSymbols && (
                         <div className={classes.symbolTables}>
-                            {this.state.symbols.map(symbol => this.displaySymbols(symbol))}
+                            {this.state.symbols.map(symbol => (
+                                <SymbolTable
+                                    key={symbol.exchange}
+                                    symbol={symbol}
+                                    displayPrices={this.displayPrices}
+                                />
+                            ))}
                         </div>
                     )}
+                    <div>
+                        {accountInformations.map(item => (
+                            <div key={item.exchangeName}>
+                                <div>{item.exchangeName}</div>
+                                {item.data.balances.map(balance => (
+                                    <div key={balance.asset}>
+                                        {balance.free}
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         );

@@ -10,6 +10,11 @@ const getAccountInformations = ({ exchange }) => async (dispatch) => {
     return new Promise(async (resolve, reject) => {
         try {
             const { json } = await exchangeService.getAccountInfo({ exchange });
+            dispatch({
+                type: states.CRYPTO_ACCOUNT_INFORMATIONS_LOADED,
+                exchangeName: json.name,
+                data: json.data,
+            });
             resolve(json);
         } catch (error) {
             console.log('getAccountInformations', error);
