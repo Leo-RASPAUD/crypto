@@ -104,18 +104,31 @@ class App extends React.Component {
 
     /* eslint-disable jsx-a11y/click-events-have-key-events */
     render() {
+        const { classes } = this.props;
         return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {this.getPopover(this.props.classes)}
-                <AppBar position="static" color="primary">
+                <AppBar
+                    position="static"
+                    color="default"
+                    className={classes.appbar}
+                    style={(!this.props.authenticated && { backgroundColor: 'transparent' }) || { backgroundColor: 'white' }}
+                >
                     <Toolbar>
-                        <Typography type="title" color="inherit" style={{ flex: 1 }}>
+                        <Typography
+                            type="title"
+                            className={classes.toolbarItem}
+                            style={(!this.props.authenticated && { color: 'white', flex: 1, marginLeft: 25 }) || { flex: 1, marginLeft: 25 }}
+                        >
                             CryptoLive
                         </Typography>
                         {this.props.authenticated && (
-                            <div>
+                            <div className={classes.toolbarItems} >
+                                <Typography type="subheading" className={classes.toolbarItem}>
+                                    Dashboard
+                                </Typography>
                                 <div ref={(node) => { this.button = node; }} onClick={this.handleClickButton}>
-                                    <IconButton color="contrast">
+                                    <IconButton className={classes.toolbarItem}>
                                         account_circle
                                     </IconButton>
                                 </div>
@@ -123,7 +136,9 @@ class App extends React.Component {
                         )}
                     </Toolbar>
                 </AppBar>
-                <RouterComponent authenticated={this.props.authenticated} location={this.props.location} />
+                <div style={(!this.props.authenticated && { marginTop: -64 }) || {}}>
+                    <RouterComponent authenticated={this.props.authenticated} location={this.props.location} />
+                </div>
             </div>
         );
     }

@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import loadingAppStates from 'components/LoadingApp/LoadingApp.states';
-import loginStates from 'components/Login/Login.states';
-import appStates from 'components/App/App.states';
+import appActions from 'components/App/App.actions';
+import loginActions from 'components/Login/Login.actions';
 
 const emptyUser = {
     id: '',
@@ -18,17 +18,17 @@ const appReducer = (state = {
     exchanges: [],
 }, action) => {
     switch (action.type) {
-        case loginStates.CRYPTO_RECEIVE_LOGIN_SUCCESSFUL:
+        case loginActions.states.CRYPTO_RECEIVE_LOGIN_SUCCESSFUL:
             return {
                 ...state,
                 loadingApp: action.loadingApp,
             };
-        case loginStates.CRYPTO_GO_TO_LOADING:
+        case loginActions.states.CRYPTO_GO_TO_LOADING:
             return {
                 ...state,
                 loadingApp: action.loadingApp,
             };
-        case appStates.CRYPTO_REDIRECT_TO_LOGIN:
+        case appActions.states.CRYPTO_REDIRECT_TO_LOGIN:
             return {
                 ...state,
                 userAuthenticated: false,

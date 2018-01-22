@@ -1,12 +1,12 @@
 /* eslint-disable indent */
-import loginStates from 'components/Login/Login.states';
 import loadingStates from 'components/LoadingApp/LoadingApp.states';
+import loginActions from 'components/Login/Login.actions';
 
 const dashboardReducer = (state = {
     accountInformations: [],
 }, action) => {
     switch (action.type) {
-        case loginStates.CRYPTO_RECEIVE_LOGIN_SUCCESSFUL:
+        case loginActions.states.CRYPTO_RECEIVE_LOGIN_SUCCESSFUL:
             return {
                 ...state,
                 userAuthenticated: !!action.user,

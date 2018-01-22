@@ -1,14 +1,19 @@
 import loginHeader from 'assets/login.jpg';
+import loginBackground from 'assets/login_background.jpg';
 
 
 export default {
     loginWrapper: {
         display: 'flex',
         justifyContent: 'center',
-        margin: 50,
+        background: `url(${loginBackground}) no-repeat center center`,
+        backgroundSize: 'cover',
+        height: '100%',
     },
     paperWrapper: {
         width: 500,
+        height: 400,
+        margin: 150,
     },
     loginHeader: {
         background: `url(${loginHeader}) no-repeat center center`,

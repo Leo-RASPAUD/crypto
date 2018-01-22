@@ -3,10 +3,17 @@ import paths from 'components/App/App.paths';
 import { SubmissionError } from 'redux-form';
 import userService from 'services/user.service';
 import localStorageConstants from 'constants/localStorage.constants';
-import states from './Login.states';
+
+const states = {
+    CRYPTO_REQUEST_SUBMIT_LOGIN: 'CRYPTO_REQUEST_SUBMIT_LOGIN',
+    CRYPTO_RECEIVE_LOGIN_SUCCESSFUL: 'CRYPTO_RECEIVE_LOGIN_SUCCESSFUL',
+};
+
+const requestSubmitLogin = () => ({ type: states.CRYPTO_REQUEST_SUBMIT_LOGIN });
+const receiveLoginSuccess = () => ({ type: states.CRYPTO_RECEIVE_LOGIN_SUCCESSFUL, loadingApp: true });
 
 const submitLogin = credentials => async (dispatch) => {
-    dispatch({ type: states.CRYPTO_REQUEST_SUBMIT_LOGIN });
+    dispatch(requestSubmitLogin());
     try {
         const { status, json } = await userService.login({ ...credentials, email: credentials.email.toLowerCase() });
         if (status !== 200) {
@@ -16,11 +23,7 @@ const submitLogin = credentials => async (dispatch) => {
         } else {
             window.localStorage.setItem(localStorageConstants.userId, json._id);
             window.localStorage.setItem(localStorageConstants.token, json.token);
-            dispatch(push(paths.authenticated.dashboard));
-            dispatch({
-                type: states.CRYPTO_RECEIVE_LOGIN_SUCCESSFUL,
-                loadingApp: true,
-            });
+            dispatch(receiveLoginSuccess());
             dispatch(push(paths.public.loading));
         }
     } catch (error) {
@@ -32,4 +35,5 @@ const submitLogin = credentials => async (dispatch) => {
 
 export default {
     submitLogin,
+    states,
 };

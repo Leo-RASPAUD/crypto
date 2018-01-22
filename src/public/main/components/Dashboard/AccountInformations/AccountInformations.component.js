@@ -9,7 +9,7 @@ import styles from './AccountInformations.styles';
 
 const THRESHOLD = 0.001;
 
-const filterLowCountItems = balance => (balance.free || balance.locked) > THRESHOLD;
+const filterLowCountItems = balance => (balance.free > THRESHOLD || balance.locked > THRESHOLD);
 
 const getCssTrends = ({ previousPrice, lastPrice }) => {
     let cssClass;
@@ -144,7 +144,7 @@ class AccountInformations extends React.Component {
                                     </Icon>
                                 </div>
                                 <div>
-                                    {item.balance.asset} ({Number.parseFloat(item.balance.free).toFixed(4)})
+                                    {item.balance.asset} ({Number.parseFloat(item.balance.free + item.balance.locked).toFixed(4)})
                                 </div>
                             </div>
                             <div className={classes.iconWrapper} >

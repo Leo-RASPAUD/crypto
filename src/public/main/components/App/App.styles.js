@@ -13,6 +13,24 @@ const avatar = theme => ({
 });
 
 export default theme => ({
+    toolbarItems: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    toolbarItem: {
+        color: theme.palette.primary['500'],
+        cursor: 'pointer',
+        transition: 'all 0.25s ease-in-out',
+        '&:hover': {
+            color: '#3f51b5',
+        },
+    },
+    appBar: {
+        backgroundColor: 'white !important',
+        color: 'white',
+        borderColor: 'rgb(43, 54, 65)',
+        height: 64,
+    },
     contentWrapper: {
         height: contentHeight - (2 * contentPadding),
         padding: contentPadding,
