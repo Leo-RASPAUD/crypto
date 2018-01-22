@@ -12,22 +12,16 @@ class Profile extends React.Component {
         getExchanges: PropTypes.func.isRequired,
     };
 
-    state = {
-        user: this.props.user,
-        isFetching: this.props.isFetching,
-        exchanges: this.props.exchanges,
-    }
-
     componentDidMount = () => {
-        this.props.getExchanges().then(this.setState({ isFetching: false }));
+        this.props.getExchanges();
     }
 
     render() {
-        const { isFetching, exchanges } = this.state;
+        const { isFetching, exchanges, user } = this.props;
         return (
             <div>
                 {isFetching && (<CircularProgress />)}
-                {!isFetching && (<ProfilePresentation user={this.state.user} exchanges={exchanges} />)}
+                {!isFetching && (<ProfilePresentation user={user} exchanges={exchanges} />)}
             </div>
         );
     }

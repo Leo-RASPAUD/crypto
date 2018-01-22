@@ -6,6 +6,7 @@ import Paper from 'material-ui/Paper';
 import Icon from 'material-ui/Icon';
 import classnames from 'classnames';
 
+import AddExchangeDialog from './AddExchangeDialog/AddExchangeDialog.component';
 import styles from './ProfilePresentation.styles';
 import labels from './ProfilePresentation.labels';
 
@@ -14,24 +15,27 @@ class ProfilePresentation extends React.Component {
     static propTypes = {
         classes: PropTypes.object.isRequired,
         user: PropTypes.object.isRequired,
+        exchanges: PropTypes.array.isRequired,
     };
 
     state = {
         user: this.props.user,
+        exchanges: this.props.exchanges,
+        isDialogOpen: false,
     }
 
     addExchange = () => {
-        const { user } = this.state;
-        user.exchanges.push({ name: 'test' });
-        this.setState({ user });
+        this.setState({ isDialogOpen: true });
     }
 
 
     render() {
         const { classes } = this.props;
-        const { user } = this.state;
+        const { user, exchanges, isDialogOpen } = this.state;
+        console.log(isDialogOpen);
         return (
             <div className={classes.root}>
+                <AddExchangeDialog open={isDialogOpen} exchanges={exchanges} user={user} />
                 <div className={classes.profileTitle} >
                     {labels.profile}
                 </div>
