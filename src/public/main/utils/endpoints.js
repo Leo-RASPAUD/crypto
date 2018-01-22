@@ -8,6 +8,7 @@ const userEndpoints = {
 
 const exchangeEndpoints = {
     getSymbols: name => `${baseExchange}/${name}/Symbol`,
+    getExchanges: `${baseExchange}/`,
     getAccountInfo: name => `${baseExchange}/${name}/accountInformations`,
     getPrices: ({ exchangeName, symbol }) => `${baseExchange}/${exchangeName}/Price/${symbol}`,
     getTrend: ({ exchangeName, symbol }) => `${baseExchange}/${exchangeName}/Price/${symbol}/Trend`,

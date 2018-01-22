@@ -17,7 +17,6 @@ const styles = theme => ({
     },
     exchangeWrapper: {
         width: 300,
-        height: 150,
         padding: 15,
         margin: '25px 50px',
     },
@@ -34,6 +33,13 @@ const styles = theme => ({
     icon: {
         marginRight: 10,
         opacity: 0.75,
+    },
+    addNewExchange: {
+        cursor: 'pointer',
+        transition: 'all 0.25s ease-in-out',
+        '&:hover': {
+            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+        },
     },
 });
 

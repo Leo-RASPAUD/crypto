@@ -15,7 +15,7 @@ const createPriceObject = prices => prices.map((item) => {
 const list = async (req, res) => {
     let exchanges;
     try {
-        exchanges = await Price.find({ distinct: 'exchange' });
+        exchanges = await Price.distinct('exchange');
         return res.send(exchanges);
     } catch (error) {
         console.log(`Error while trying to get the exchanges ${error}`);
