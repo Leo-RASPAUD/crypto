@@ -5,6 +5,7 @@ const paths = {
     },
     authenticated: {
         dashboard: '/dashboard',
+        profile: '/profile',
     },
 };
 

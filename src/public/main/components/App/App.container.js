@@ -11,6 +11,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     redirectToLogin: () => dispatch(actions.redirectToLogin()),
     goToLoading: () => dispatch(actions.goToLoading()),
+    goToProfile: () => dispatch(actions.goToProfile()),
+    goToDashboard: () => dispatch(actions.goToDashboard()),
     logout: () => dispatch(actions.logout()),
 });
 

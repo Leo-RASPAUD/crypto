@@ -5,11 +5,15 @@ import paths from 'components/App/App.paths';
 const states = {
     CRYPTO_GO_TO_LOADING: 'CRYPTO_GO_TO_LOADING',
     CRYPTO_REDIRECT_TO_LOGIN: 'CRYPTO_REDIRECT_TO_LOGIN',
+    CRYPTO_REDIRECT_TO_PROFILE: 'CRYPTO_REDIRECT_TO_PROFILE',
+    CRYPTO_REDIRECT_TO_DASHBOARD: 'CRYPTO_REDIRECT_TO_DASHBOARD',
     REQUEST_LOGOUT: 'REQUEST_LOGOUT',
 };
 
 const requestLogout = () => ({ type: states.REQUEST_LOGOUT, userAuthenticated: false });
-const requestGoToLogin = () => ({ type: states.CRYPTO_GO_TO_LOADING, loadingApp: true });
+const requestGoToLoading = () => ({ type: states.CRYPTO_GO_TO_LOADING, loadingApp: true });
+const requestGoToProfile = () => ({ type: states.CRYPTO_REDIRECT_TO_PROFILE });
+const requestGoToDashboard = () => ({ type: states.CRYPTO_REDIRECT_TO_DASHBOARD });
 const requestRedirectToLogin = () => ({ type: states.CRYPTO_REDIRECT_TO_LOGIN, loadingApp: false });
 
 const logout = () => (dispatch) => {
@@ -20,8 +24,18 @@ const logout = () => (dispatch) => {
 };
 
 const goToLoading = () => (dispatch) => {
-    dispatch(requestGoToLogin());
+    dispatch(requestGoToLoading());
     dispatch(push(paths.public.loading));
+};
+
+const goToDashboard = () => (dispatch) => {
+    dispatch(requestGoToDashboard());
+    dispatch(push(paths.authenticated.dashboard));
+};
+
+const goToProfile = () => (dispatch) => {
+    dispatch(requestGoToProfile());
+    dispatch(push(paths.authenticated.profile));
 };
 
 const redirectToLogin = () => (dispatch) => {
@@ -33,5 +47,7 @@ export default {
     states,
     logout,
     goToLoading,
+    goToDashboard,
+    goToProfile,
     redirectToLogin,
 };

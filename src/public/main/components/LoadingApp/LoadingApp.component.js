@@ -57,7 +57,10 @@ class LoadingApp extends React.Component {
     render() {
         const { classes } = this.props;
         return (
-            <div className={classes.loadingWrapper}>
+            <div
+                className={classes.loadingWrapper}
+                style={(this.state.loadingUserData && { marginTop: 114 }) || {}}
+            >
                 <Paper className={classes.paperWrapper}>
                     <div className={classes.loadingIcon}>
                         <div className="cssload-container" >

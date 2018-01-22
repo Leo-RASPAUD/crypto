@@ -1,0 +1,40 @@
+const styles = theme => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginTop: 25,
+    },
+    profileTitle: {
+        fontSize: 24,
+        color: theme.palette.primary['500'],
+    },
+    personalInformations: {
+        width: 300,
+        height: 150,
+        padding: 15,
+        margin: '25px 50px',
+    },
+    exchangeWrapper: {
+        width: 300,
+        height: 150,
+        padding: 15,
+        margin: '25px 50px',
+    },
+    subtitle: {
+        borderBottom: '1px solid rgba(0,0,0,0.25)',
+        padding: 15,
+        opacity: 0.75,
+    },
+    item: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: 15,
+    },
+    icon: {
+        marginRight: 10,
+        opacity: 0.75,
+    },
+});
+
+export default styles;

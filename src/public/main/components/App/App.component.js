@@ -13,6 +13,7 @@ import localStorageConstants from 'constants/localStorage.constants';
 import RouterComponent from './Router/Router.component';
 
 import styles from './App.styles';
+import labels from './App.labels';
 
 @withStyles(styles)
 class App extends React.Component {
@@ -22,6 +23,8 @@ class App extends React.Component {
         user: PropTypes.object.isRequired,
         authenticated: PropTypes.bool.isRequired,
         logout: PropTypes.func.isRequired,
+        goToDashboard: PropTypes.func.isRequired,
+        goToProfile: PropTypes.func.isRequired,
     };
 
     state = {
@@ -77,7 +80,7 @@ class App extends React.Component {
                             root: classes.signOutButton,
                         }}
                     >
-                        Sign out
+                        {labels.signOut}
                     </Button>
                 </div>
             </Popover>
@@ -104,7 +107,7 @@ class App extends React.Component {
 
     /* eslint-disable jsx-a11y/click-events-have-key-events */
     render() {
-        const { classes } = this.props;
+        const { classes, goToDashboard, goToProfile } = this.props;
         return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {this.getPopover(this.props.classes)}
@@ -124,8 +127,11 @@ class App extends React.Component {
                         </Typography>
                         {this.props.authenticated && (
                             <div className={classes.toolbarItems} >
-                                <Typography type="subheading" className={classes.toolbarItem}>
-                                    Dashboard
+                                <Typography type="subheading" className={classes.toolbarItem} onClick={goToDashboard}>
+                                    {labels.dashboard}
+                                </Typography>
+                                <Typography type="subheading" className={classes.toolbarItem} onClick={goToProfile}>
+                                    {labels.profile}
                                 </Typography>
                                 <div ref={(node) => { this.button = node; }} onClick={this.handleClickButton}>
                                     <IconButton className={classes.toolbarItem}>

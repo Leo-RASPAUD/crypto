@@ -20,6 +20,7 @@ export default theme => ({
     toolbarItem: {
         color: theme.palette.primary['500'],
         cursor: 'pointer',
+        marginRight: 20,
         transition: 'all 0.25s ease-in-out',
         '&:hover': {
             color: '#3f51b5',
