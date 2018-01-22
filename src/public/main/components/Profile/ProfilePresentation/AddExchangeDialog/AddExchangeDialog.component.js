@@ -20,13 +20,12 @@ class AddExchangeDialog extends React.Component {
     static propTypes = {
         // classes: PropTypes.object.isRequired,
         exchanges: PropTypes.array.isRequired,
-        open: PropTypes.bool.isRequired,
         user: PropTypes.object.isRequired,
     };
 
     state = {
         exchanges: this.props.exchanges.filter(item => !this.props.user.exchanges.find(userExchange => userExchange.name === item)),
-        open: false,
+        open: true,
         selectedExchange: this.props.exchanges[0],
     }
 
@@ -41,7 +40,6 @@ class AddExchangeDialog extends React.Component {
     render() {
         // const { classes } = this.props;
         // console.log(classes);
-        console.log(this.props.open);
         const { exchanges, open, selectedExchange } = this.state;
         console.log(exchanges, open, exchanges);
         return (

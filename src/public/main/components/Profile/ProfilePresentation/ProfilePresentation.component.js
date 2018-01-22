@@ -32,7 +32,6 @@ class ProfilePresentation extends React.Component {
     render() {
         const { classes } = this.props;
         const { user, exchanges, isDialogOpen } = this.state;
-        console.log(isDialogOpen);
         return (
             <div className={classes.root}>
                 <AddExchangeDialog open={isDialogOpen} exchanges={exchanges} user={user} />

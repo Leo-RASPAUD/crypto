@@ -5,7 +5,7 @@ import { withStyles } from 'material-ui/styles';
 import compose from 'recompose/compose';
 import Button from 'material-ui/Button';
 import Paper from 'material-ui/Paper';
-import FormTextFieldComponent from 'components/Commons/FormTextField/FormTextField.component';
+import FormTextFieldComponent from 'components/commons/FormTextField/FormTextField.component';
 import labels from './Login.labels';
 import styles from './Login.style';
 
