@@ -19,7 +19,7 @@ const exchangesHandler = require('./src/handlers/exchanges');
 const app = express();
 
 
-mongoose.connect(`${conf.params.db_type}://${conf.params.host}:${conf.params.db_port}/${conf.params.db_name}`);
+mongoose.connect(`${conf.params.db_type}://${conf.params.mongoHost}:${conf.params.db_port}/${conf.params.db_name}`);
 const MongooseStore = mongoSession(session.Store);
 const mongoStore = new MongooseStore({ connection: mongoose });
 mongoose.Promise = global.Promise;

@@ -14,6 +14,7 @@ const exposeApiParams = (app, params) => {
 module.exports = {
     authentication,
     params: {
+        mongoHost: process.env.MONGO_HOST || 'localhost',
         host: process.env.API_HOST || 'localhost',
         port: process.env.PORT || 8085,
         db_type: process.env.DB_TYPE || 'mongodb',
