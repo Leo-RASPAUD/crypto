@@ -20,12 +20,13 @@ class AddExchangeDialog extends React.Component {
     static propTypes = {
         // classes: PropTypes.object.isRequired,
         exchanges: PropTypes.array.isRequired,
+        open: PropTypes.bool.isRequired,
         user: PropTypes.object.isRequired,
     };
 
     state = {
         exchanges: this.props.exchanges.filter(item => !this.props.user.exchanges.find(userExchange => userExchange.name === item)),
-        open: true,
+        open: this.props.open,
         selectedExchange: this.props.exchanges[0],
     }
 

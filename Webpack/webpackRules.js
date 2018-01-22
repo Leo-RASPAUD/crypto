@@ -11,6 +11,7 @@ const babelLoaderRule = {
                 [
                     'transform-runtime', {
                         regenerator: true,
+                        polyfill: false,
                     },
                 ],
             ],
