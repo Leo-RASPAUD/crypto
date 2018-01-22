@@ -25,9 +25,17 @@ class AddExchangeDialog extends React.Component {
     };
 
     state = {
-        exchanges: this.props.exchanges.filter(item => !this.props.user.exchanges.find(userExchange => userExchange.name === item)),
-        open: this.props.open,
-        selectedExchange: this.props.exchanges[0],
+        exchanges: [],
+        open: false,
+        selectedExchange: '',
+    }
+
+    componentWillReceiveProps = (nextProps) => {
+        this.setState({
+            exchanges: nextProps.exchanges.filter(item => !this.props.user.exchanges.find(userExchange => userExchange.name === item)),
+            open: nextProps.open,
+            selectedExchange: nextProps.exchanges[0],
+        });
     }
 
     handleChange = (event) => {
@@ -42,7 +50,6 @@ class AddExchangeDialog extends React.Component {
         // const { classes } = this.props;
         // console.log(classes);
         const { exchanges, open, selectedExchange } = this.state;
-        console.log(exchanges, open, exchanges);
         return (
             <Dialog
                 open={open}

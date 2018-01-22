@@ -24,10 +24,16 @@ class ProfilePresentation extends React.Component {
         isDialogOpen: false,
     }
 
+    componentWillReceiveProps = (nextProps) => {
+        this.setState({
+            user: nextProps.user,
+            exchanges: nextProps.exchanges,
+        });
+    }
+
     addExchange = () => {
         this.setState({ isDialogOpen: true });
     }
-
 
     render() {
         const { classes } = this.props;
