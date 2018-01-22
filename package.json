@@ -8,8 +8,7 @@
   "scripts": {
     "apiWatch": "./node_modules/.bin/nodemon server.js",
     "watch": "./node_modules/.bin/webpack-dev-server --hot --config ./webpack.config.babel.js",
-    "exports": "DB_PORT=27017 && mongoHost=10.192.20.159",
-    "start": "npm run exports && ./node_modules/.bin/webpack --env=prod -p --config ./webpack.prod.config.babel.js --progress --colors && node server.js"
+     "start": "./node_modules/.bin/webpack --env=prod -p --config ./webpack.prod.config.babel.js --progress --colors && node server.js"
   },
   "babel": {
     "presets": [
