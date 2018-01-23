@@ -14,7 +14,7 @@ const dashboardReducer = (state = {
                 exchanges: action.exchanges,
                 accountInfo: action.accountInfo,
             };
-        case loadingStates.CRYPTO_ACCOUNT_INFORMATIONS_LOADED:
+        case loadingStates.CRYPTO_ACCOUNT_INFORMATIONS_SUCCESS:
             return {
                 ...state,
                 accountInformations: state.accountInformations.concat({

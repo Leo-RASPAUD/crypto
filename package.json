@@ -8,7 +8,7 @@
   "scripts": {
     "apiWatch": "./node_modules/.bin/nodemon server.js",
     "watch": "./node_modules/.bin/webpack-dev-server --hot --config ./webpack.config.babel.js",
-     "start": "./node_modules/.bin/webpack --env=prod -p --config ./webpack.prod.config.babel.js --progress --colors && node server.js"
+    "start": "./node_modules/.bin/webpack --env=prod -p --config ./webpack.prod.config.babel.js --progress --colors && node server.js"
   },
   "babel": {
     "presets": [
@@ -29,6 +29,7 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "css-loader": "^0.28.8",
+    "email-validator": "^1.1.1",
     "eslint-import-resolver-webpack": "^0.8.4",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
@@ -45,6 +46,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
+    "react-redux-loading-bar": "^3.1.1",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
     "recharts": "^1.0.0-beta.9",

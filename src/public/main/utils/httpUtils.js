@@ -45,6 +45,20 @@ const get = ({ url }) => {
     }).then(json => json);
 };
 
+const deleteHttp = ({ url }) => {
+    const headers = {};
+    headers[httpConstants.contentType] = httpConstants.json.value;
+    const params = {
+        method: httpConstants.requestTypes.delete,
+        headers,
+        credentials: 'include',
+    };
+    return fetchUrl(url, params).then(async (response) => {
+        const json = await response.json();
+        return { status: response.status, json };
+    }).then(json => json);
+};
+
 const patch = ({ body, url }) => {
     const headers = {};
     headers[httpConstants.contentType] = httpConstants.json.value;
@@ -65,5 +79,6 @@ export default {
     post,
     get,
     patch,
+    deleteHttp,
 };
 

@@ -13,6 +13,12 @@ const avatar = theme => ({
 });
 
 export default theme => ({
+    loadingBar: {
+        position: 'absolute',
+        height: 2,
+        backgroundColor: theme.palette.secondary[500],
+        opacity: '0.75 !important',
+    },
     toolbarItems: {
         display: 'flex',
         alignItems: 'center',

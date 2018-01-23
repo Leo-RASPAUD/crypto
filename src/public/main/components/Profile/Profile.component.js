@@ -10,6 +10,8 @@ class Profile extends React.Component {
         exchanges: PropTypes.array.isRequired,
         isFetching: PropTypes.bool.isRequired,
         getExchanges: PropTypes.func.isRequired,
+        addExchange: PropTypes.func.isRequired,
+        removeExchange: PropTypes.func.isRequired,
     };
 
     componentDidMount = () => {
@@ -17,11 +19,11 @@ class Profile extends React.Component {
     }
 
     render() {
-        const { isFetching, exchanges, user } = this.props;
+        const { isFetching, exchanges, user, addExchange, removeExchange } = this.props;
         return (
             <div>
                 {isFetching && (<CircularProgress />)}
-                {!isFetching && (<ProfilePresentation user={user} exchanges={exchanges} />)}
+                {!isFetching && (<ProfilePresentation user={user} exchanges={exchanges} addExchange={addExchange} removeExchange={removeExchange} />)}
             </div>
         );
     }

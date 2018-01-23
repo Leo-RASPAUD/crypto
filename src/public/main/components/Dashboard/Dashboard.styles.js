@@ -1,4 +1,4 @@
-const styles = () => ({
+const styles = theme => ({
     table: {
     },
     exchanges: {
@@ -23,6 +23,24 @@ const styles = () => ({
     },
     accountInformationsWrapper: {
         display: 'flex',
+    },
+    noDataWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        margin: 50,
+    },
+    noData: {
+        display: 'flex',
+        flexDirection: 'column',
+        textAlign: 'justify',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 200,
+        width: 400,
+        padding: 25,
+        color: theme.palette.primary['500'],
+        opacity: 0.75,
+        fontSize: 18,
     },
 });
 

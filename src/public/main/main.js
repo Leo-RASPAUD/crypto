@@ -8,6 +8,7 @@ import createHistory from 'history/createBrowserHistory';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import blue from 'material-ui/colors/blue';
 import red from 'material-ui/colors/red';
+import { loadingBarMiddleware } from 'react-redux-loading-bar';
 
 import App from 'components/App/App.container';
 import mainReducer from 'reducers/mainReducer';
@@ -24,6 +25,7 @@ settings.initEnvironmentVariables().then(() => {
     const composeFunctions = [
         applyMiddleware(thunkMiddleware),
         applyMiddleware(routerMiddleware(history)),
+        applyMiddleware(loadingBarMiddleware({ promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'FAILURE'] })),
         ...(process.env.NODE_ENV !== 'production' ?
             [window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION__()] :
             {}),

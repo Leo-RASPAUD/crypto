@@ -1,4 +1,8 @@
 const styles = theme => ({
+    removeIcon: {
+        color: '#f44336',
+        cursor: 'pointer',
+    },
     root: {
         display: 'flex',
         flexDirection: 'column',

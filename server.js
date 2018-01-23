@@ -50,11 +50,16 @@ app.use(compression());
 
 
 // Endpoints
-app.post('/user/:id/addExchange', security.isAuthenticated, userEndpoints.addExchange);
 app.post('/login', userEndpoints.login);
+
+// User
 app.get('/user', security.isAuthenticated, userEndpoints.listUsers);
-app.post('/createUser', userEndpoints.createUser);
+app.post('/user', userEndpoints.createUser);
 app.get('/user/:id', security.isAuthenticated, userEndpoints.getUserDetails);
+app.post('/user/:id/addExchange', security.isAuthenticated, userEndpoints.addExchange);
+app.delete('/user/:id/exchange/:exchangeName', security.isAuthenticated, userEndpoints.deleteExchange);
+
+// Exchange
 app.get('/exchange', security.isAuthenticated, exchangesEndpoints.list);
 app.get('/exchange/:name/Symbol', security.isAuthenticated, exchangesEndpoints.getSymbols);
 app.post('/exchange/:name/accountInformations', security.isAuthenticated, exchangesEndpoints.getAccountInfo);

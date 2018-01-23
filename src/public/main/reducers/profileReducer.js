@@ -22,6 +22,19 @@ const profileReducer = (state = {
                 ...state,
                 isFetching: false,
             };
+        case actions.states.CRYPTO_ADD_EXCHANGE_LOADING:
+            return {
+                ...state,
+            };
+        case actions.states.CRYPTO_ADD_EXCHANGE_SUCCESS:
+            return {
+                ...state,
+                exchanges: action.exchanges,
+            };
+        case actions.states.CRYPTO_ADD_EXCHANGE_FAILURE:
+            return {
+                ...state,
+            };
         default:
             return state;
     }

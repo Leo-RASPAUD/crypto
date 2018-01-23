@@ -12,6 +12,7 @@ const requestTypes = {
     post: 'POST',
     get: 'GET',
     patch: 'PATCH',
+    delete: 'DELETE',
 };
 
 const contentType = 'Content-Type';

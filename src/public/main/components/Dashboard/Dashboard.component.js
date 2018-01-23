@@ -3,12 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { CircularProgress } from 'material-ui/Progress';
+import Paper from 'material-ui/Paper';
 
 import SymbolTable from './SymbolTable/SymbolTable.component';
 import Chart from './Chart/Chart.component';
 import AccountInformations from './AccountInformations/AccountInformations.component';
 
 import styles from './Dashboard.styles';
+import labels from './Dashboard.labels';
 
 @withStyles(styles)
 class Dashboard extends React.Component {
@@ -55,6 +57,18 @@ class Dashboard extends React.Component {
         } = this.props;
         return (
             <div className={classes.root}>
+                {accountInformations.length === 0 && (
+                    <div className={classes.noDataWrapper}>
+                        <Paper className={classes.noData}>
+                            <div>
+                                {labels.welcome}
+                            </div>
+                            <div style={{ paddingTop: 15 }}>
+                                {labels.goToProfile}
+                            </div>
+                        </Paper>
+                    </div>
+                )}
                 <div>
                     <div className={classes.accountInformationsWrapper} >
                         {accountInformations.map(item => (

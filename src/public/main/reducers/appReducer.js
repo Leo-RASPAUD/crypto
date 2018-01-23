@@ -1,6 +1,7 @@
 /* eslint-disable indent */
 import loadingAppStates from 'components/LoadingApp/LoadingApp.states';
 import appActions from 'components/App/App.actions';
+import snackbarTypes from 'utils/snackbarTypes';
 import loginActions from 'components/Login/Login.actions';
 
 const emptyUser = {
@@ -16,6 +17,9 @@ const appReducer = (state = {
     loadingApp: true,
     accountInformations: [],
     exchanges: [],
+    isSnackbarDisplayed: false,
+    snackbarMessage: '',
+    snackbarType: snackbarTypes.INFO,
 }, action) => {
     switch (action.type) {
         case loginActions.states.CRYPTO_RECEIVE_LOGIN_SUCCESSFUL:
@@ -56,6 +60,14 @@ const appReducer = (state = {
                 loadingUserData: action.loadingUserData,
                 accountInformations: action.accountInformations,
             };
+        case 'CRYPTO_REQUEST_SHOW_SNACKBAR':
+        case 'CRYPTO_RECEIVE_HIDE_SNACKBAR':
+                return {
+                    ...state,
+                    isSnackbarDisplayed: action.isSnackbarDisplayed,
+                    snackbarMessage: action.snackbarMessage,
+                    snackbarType: action.snackbarType,
+                };
         default:
             return state;
     }

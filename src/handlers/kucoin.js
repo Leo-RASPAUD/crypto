@@ -1,6 +1,8 @@
 const Kucoin = require('kucoin-api');
 const Price = require('../models/Price/Price');
 
+const delay = duration => new Promise(resolve => setTimeout(resolve, duration));
+
 const getData = async () => {
     console.log('Refresh Kucoin data ...');
     const time = Date.now();
@@ -35,6 +37,7 @@ const getAccountInfo = async ({ credentials }) => {
     let accountInfo;
     try {
         accountInfo = await kc.getBalance();
+        await delay(1000);
         const formattedResult = {
             balances: accountInfo.data.map(item => ({ asset: item.coinType, free: item.balance, locked: item.freezeBalance })),
         };
@@ -59,6 +62,11 @@ const getAccountInfo = async ({ credentials }) => {
         return Promise.reject(error);
     }
 };
+
+async function sleep(fn, ...args) {
+    await timeout(3000);
+    return fn(...args);
+}
 
 module.exports = {
     getData,

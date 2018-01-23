@@ -9,7 +9,9 @@ import Popover from 'material-ui/Popover';
 import Button from 'material-ui/Button';
 import Avatar from 'material-ui/Avatar';
 import Icon from 'material-ui/Icon';
+import LoadingBar from 'react-redux-loading-bar';
 import localStorageConstants from 'constants/localStorage.constants';
+import SnackbarComponent from 'components/Commons/Snackbar/Snackbar.container';
 import RouterComponent from './Router/Router.component';
 
 import styles from './App.styles';
@@ -142,6 +144,8 @@ class App extends React.Component {
                         )}
                     </Toolbar>
                 </AppBar>
+                <SnackbarComponent />
+                <LoadingBar className={classes.loadingBar} />
                 <div style={(!this.props.authenticated && { marginTop: -64 }) || {}}>
                     <RouterComponent authenticated={this.props.authenticated} location={this.props.location} />
                 </div>

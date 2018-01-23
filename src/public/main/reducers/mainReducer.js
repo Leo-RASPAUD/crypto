@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
+import { loadingBarReducer } from 'react-redux-loading-bar';
 import appReducer from './appReducer';
 import dashboardReducer from './dashboardReducer';
 import profileReducer from './profileReducer';
 
 const mainReducer = combineReducers({
+    loadingBar: loadingBarReducer,
     router: routerReducer,
     app: appReducer,
     dashboard: dashboardReducer,

@@ -9,9 +9,12 @@ const mapStateToProps = state => ({
     exchanges: state.profile.exchanges,
 });
 
-const mapDispatchToProps = dispatch =>
-    ({
-        getExchanges: () => dispatch(actions.getExchanges()),
-    });
+const mergeProps = (state, { dispatch }, { ...otherProps }) => ({
+    ...otherProps,
+    ...state,
+    getExchanges: () => dispatch(actions.getExchanges()),
+    addExchange: ({ exchange }) => dispatch(actions.addExchange({ exchange, userId: state.user._id })),
+    removeExchange: ({ exchangeName }) => dispatch(actions.removeExchange({ exchangeName, userId: state.user._id })),
+});
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Profile));
+export default withRouter(connect(mapStateToProps, null, mergeProps)(Profile));

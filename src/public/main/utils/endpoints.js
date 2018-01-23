@@ -3,7 +3,10 @@ const baseExchange = '/exchange';
 
 const userEndpoints = {
     login: '/login',
+    createUser: baseUser,
     getUserDetails: id => `${baseUser}/${id}`,
+    addExchange: id => `${baseUser}/${id}/addExchange`,
+    removeExchange: ({ userId, exchangeName }) => `${baseUser}/${userId}/exchange/${exchangeName}`,
 };
 
 const exchangeEndpoints = {

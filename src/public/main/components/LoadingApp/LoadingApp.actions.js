@@ -6,17 +6,18 @@ import paths from 'components/App/App.paths';
 import states from './LoadingApp.states';
 
 const getAccountInformations = ({ exchange }) => async (dispatch) => {
-    dispatch({ type: states.CRYPTO_REQUEST_LOAD_ACCOUNT_INFORMATIONS });
+    dispatch({ type: states.CRYPTO_REQUEST_LOAD_ACCOUNT_INFORMATIONS_LOADING });
     return new Promise(async (resolve, reject) => {
         try {
             const { json } = await exchangeService.getAccountInfo({ exchange });
             dispatch({
-                type: states.CRYPTO_ACCOUNT_INFORMATIONS_LOADED,
+                type: states.CRYPTO_ACCOUNT_INFORMATIONS_SUCCESS,
                 exchangeName: json.name,
                 data: json.data,
             });
             resolve(json);
         } catch (error) {
+            dispatch({ type: states.CRYPTO_ACCOUNT_INFORMATIONS_FAILURE });
             console.log('getAccountInformations', error);
             dispatch(push(paths.public.login));
             reject(error);
