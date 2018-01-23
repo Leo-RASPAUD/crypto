@@ -11,7 +11,7 @@ import Avatar from 'material-ui/Avatar';
 import Icon from 'material-ui/Icon';
 import LoadingBar from 'react-redux-loading-bar';
 import localStorageConstants from 'constants/localStorage.constants';
-import SnackbarComponent from 'components/Commons/Snackbar/Snackbar.container';
+import SnackbarComponent from 'components/commons/Snackbar/Snackbar.container';
 import RouterComponent from './Router/Router.component';
 
 import styles from './App.styles';
