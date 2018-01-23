@@ -25,7 +25,7 @@ const mongoStore = new MongooseStore({ connection: mongoose });
 mongoose.Promise = global.Promise;
 
 app.use(cors({
-    origin: 'http://localhost:8082',
+    origin: '*',
     credentials: true,
 }));
 
