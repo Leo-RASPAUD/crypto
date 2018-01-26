@@ -5,14 +5,11 @@ import { withStyles } from 'material-ui/styles';
 import Toolbar from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
 import Typography from 'material-ui/Typography';
-import Popover from 'material-ui/Popover';
-import Button from 'material-ui/Button';
-import Avatar from 'material-ui/Avatar';
-import Icon from 'material-ui/Icon';
 import LoadingBar from 'react-redux-loading-bar';
 import localStorageConstants from 'constants/localStorage.constants';
 import SnackbarComponent from 'components/commons/Snackbar/Snackbar.container';
 import RouterComponent from './Router/Router.component';
+import PopoverUser from './PopoverUser/PopoverUser.component';
 
 import styles from './App.styles';
 import labels from './App.labels';
@@ -30,12 +27,9 @@ class App extends React.Component {
     };
 
     state = {
-        popoverOpen: false,
+        popoverUserOpened: false,
         anchorElement: null,
-        anchorOriginVertical: 'bottom',
-        anchorOriginHorizontal: 'center',
-    }
-
+    };
 
     componentDidMount = async () => {
         const userId = window.localStorage.getItem(localStorageConstants.userId);
@@ -47,72 +41,28 @@ class App extends React.Component {
         }
     }
 
-    getPopover = (classes) => {
-        const {
-            popoverOpen,
-            anchorElement,
-            anchorOriginVertical,
-            anchorOriginHorizontal,
-        } = this.state;
-        return (
-            <Popover
-                classes={{ paper: classes.popover }}
-                open={popoverOpen}
-                anchorEl={anchorElement}
-                onClose={this.handleRequestClose}
-                anchorOrigin={{
-                    vertical: anchorOriginVertical,
-                    horizontal: anchorOriginHorizontal,
-                }}
-            >
-                <div className={classes.contentWrapper} >
-                    <Avatar className={classes.avatarClass} >
-                        <Icon>account_circle</Icon>
-                    </Avatar>
-                    <div className={classes.username} >
-                        {this.props.user.email}
-                    </div>
-                </div>
-                <div className={classes.buttons} >
-                    <Button
-                        onClick={this.logout}
-                        color="accent"
-                        raised
-                        classes={{
-                            root: classes.signOutButton,
-                        }}
-                    >
-                        {labels.signOut}
-                    </Button>
-                </div>
-            </Popover>
-        );
+    openPopoverUser = () => {
+        this.setState({ popoverUserOpened: true, anchorElement: this.button });
     }
 
-    logout = () => {
-        this.props.logout();
-        this.handleRequestClose();
+    updateParentState = (newState) => {
+        this.setState(newState);
     }
 
-    handleClickButton = () => {
-        this.setState({
-            popoverOpen: true,
-            anchorElement: this.button,
-        });
-    };
-
-    handleRequestClose = () => {
-        this.setState({
-            popoverOpen: false,
-        });
-    };
-
-    /* eslint-disable jsx-a11y/click-events-have-key-events */
     render() {
-        const { classes, goToDashboard, goToProfile } = this.props;
+        const { classes, goToDashboard, goToProfile, user, logout } = this.props;
+        const { popoverUserOpened, anchorElement } = this.state;
         return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {this.getPopover(this.props.classes)}
+                <PopoverUser
+                    user={user}
+                    logout={logout}
+                    popoverUserOpened={popoverUserOpened}
+                    updateParentState={this.updateParentState}
+                    anchorElement={anchorElement}
+                />
+                <LoadingBar className={classes.loadingBar} />
+                <SnackbarComponent />
                 <AppBar
                     position="static"
                     color="default"
@@ -135,7 +85,7 @@ class App extends React.Component {
                                 <Typography type="subheading" className={classes.toolbarItem} onClick={goToProfile}>
                                     {labels.profile}
                                 </Typography>
-                                <div ref={(node) => { this.button = node; }} onClick={this.handleClickButton}>
+                                <div ref={(node) => { this.button = node; }} onClick={this.openPopoverUser}>
                                     <IconButton className={classes.toolbarItem}>
                                         account_circle
                                     </IconButton>
@@ -144,11 +94,11 @@ class App extends React.Component {
                         )}
                     </Toolbar>
                 </AppBar>
-                <SnackbarComponent />
-                <LoadingBar className={classes.loadingBar} />
-                <div style={(!this.props.authenticated && { marginTop: -64 }) || {}}>
-                    <RouterComponent authenticated={this.props.authenticated} location={this.props.location} />
-                </div>
+                <RouterComponent
+                    authenticated={this.props.authenticated}
+                    location={this.props.location}
+                    style={(!this.props.authenticated && { marginTop: -64 }) || {}}
+                />
             </div>
         );
     }

@@ -3,6 +3,7 @@ import loadingAppStates from 'components/LoadingApp/LoadingApp.states';
 import appActions from 'components/App/App.actions';
 import snackbarTypes from 'utils/snackbarTypes';
 import loginActions from 'components/Login/Login.actions';
+import profileActions from 'components/Profile/Profile.actions';
 
 const emptyUser = {
     id: '',
@@ -60,14 +61,19 @@ const appReducer = (state = {
                 loadingUserData: action.loadingUserData,
                 accountInformations: action.accountInformations,
             };
+        case profileActions.states.CRYPTO_REMOVE_EXCHANGE_SUCCESS:
+            return {
+                ...state,
+                user: { ...state.user, exchanges: state.user.exchanges.filter(exchange => exchange.name !== action.exchangeRemoved) },
+            };
         case 'CRYPTO_REQUEST_SHOW_SNACKBAR':
         case 'CRYPTO_RECEIVE_HIDE_SNACKBAR':
-                return {
-                    ...state,
-                    isSnackbarDisplayed: action.isSnackbarDisplayed,
-                    snackbarMessage: action.snackbarMessage,
-                    snackbarType: action.snackbarType,
-                };
+            return {
+                ...state,
+                isSnackbarDisplayed: action.isSnackbarDisplayed,
+                snackbarMessage: action.snackbarMessage,
+                snackbarType: action.snackbarType,
+            };
         default:
             return state;
     }

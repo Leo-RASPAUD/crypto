@@ -37,13 +37,13 @@ const addExchange = async (req, res) => {
 const deleteExchange = async (req, res) => {
     const { exchangeName } = req.params;
     const { id } = req.params;
-    let user;
     try {
-        user = await User.findByIdAndUpdate(
+        await User.findByIdAndUpdate(
             { _id: id },
             { $pull: { exchanges: { name: exchangeName } } },
             { safe: true, upsert: true },
         );
+        const user = await User.findById(req.user.id);
         res.status(200).send(user);
     } catch (error) {
         console.log(error);
@@ -57,7 +57,6 @@ const createUser = async (req, res) => {
     if (!validator.validate(email)) {
         res.status(500).json({ message: 'Invalid email' });
     } else {
-        console.log('ici');
         const user = new User({ email, password });
         let newUser;
         try {

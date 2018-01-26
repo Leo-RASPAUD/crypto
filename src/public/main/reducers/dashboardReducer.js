@@ -1,6 +1,7 @@
 /* eslint-disable indent */
 import loadingStates from 'components/LoadingApp/LoadingApp.states';
 import loginActions from 'components/Login/Login.actions';
+import profileActions from 'components/Profile/Profile.actions';
 
 const dashboardReducer = (state = {
     accountInformations: [],
@@ -21,6 +22,11 @@ const dashboardReducer = (state = {
                     exchangeName: action.exchangeName,
                     data: action.data,
                 }),
+            };
+        case profileActions.states.CRYPTO_REMOVE_EXCHANGE_SUCCESS:
+            return {
+                ...state,
+                accountInformations: state.accountInformations.filter(item => item.exchangeName !== action.exchangeRemoved.name),
             };
         default:
             return state;

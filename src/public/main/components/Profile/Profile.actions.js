@@ -21,10 +21,10 @@ const getExchangesLoading = () => ({ type: states.CRYPTO_GET_EXCHANGES_LOADING }
 const getExchangesSuccess = ({ exchanges }) => ({ type: states.CRYPTO_GET_EXCHANGES_SUCCESS, exchanges });
 const getExchangesFailure = () => ({ type: states.CRYPTO_GET_EXCHANGES_FAILURE });
 const addExchangeLoading = () => ({ type: states.CRYPTO_ADD_EXCHANGE_LOADING });
-const addExchangeSuccess = ({ exchanges }) => ({ type: states.CRYPTO_ADD_EXCHANGE_SUCCESS, exchanges });
+const addExchangeSuccess = ({ exchangeAdded }) => ({ type: states.CRYPTO_ADD_EXCHANGE_SUCCESS, exchangeAdded });
 const addExchangeError = () => ({ type: states.CRYPTO_ADD_EXCHANGE_FAILURE });
 const removeExchangeLoading = () => ({ type: states.CRYPTO_REMOVE_EXCHANGE_LOADING });
-const removeExchangeSuccess = ({ exchanges }) => ({ type: states.CRYPTO_REMOVE_EXCHANGE_SUCCESS, exchanges });
+const removeExchangeSuccess = ({ exchangeRemoved }) => ({ type: states.CRYPTO_REMOVE_EXCHANGE_SUCCESS, exchangeRemoved });
 const removeExchangeError = () => ({ type: states.CRYPTO_REMOVE_EXCHANGE_FAILURE });
 const displaySnackbar = ({ message, type }) => ({
     type: states.REQUEST_SHOW_SNACKBAR,
@@ -43,11 +43,11 @@ const addExchange = ({ exchange, userId }) => async (dispatch) => {
             dispatch(addExchangeError());
         } else {
             dispatch(displaySnackbar({ message: 'Exchange added successfully', type: snackbarTypes.SUCCESS }));
-            dispatch(addExchangeSuccess({ exchanges: json.exchanges }));
+            dispatch(addExchangeSuccess({ exchangeAdded: exchange }));
         }
     } catch (error) {
         console.error('Profile : error while trying to add an exchange');
-        dispatch(displaySnackbar({ message: error, type: snackbarTypes.ERROR }));
+        dispatch(displaySnackbar({ message: error.message, type: snackbarTypes.ERROR }));
         dispatch(addExchangeError());
     }
 };
@@ -62,11 +62,11 @@ const removeExchange = ({ exchangeName, userId }) => async (dispatch) => {
             dispatch(removeExchangeError());
         } else {
             dispatch(displaySnackbar({ message: 'Exchange removeed successfully', type: snackbarTypes.SUCCESS }));
-            dispatch(removeExchangeSuccess({ exchanges: json.exchanges }));
+            dispatch(removeExchangeSuccess({ exchangeRemoved: exchangeName }));
         }
     } catch (error) {
         console.error('Profile : error while trying to remove an exchange');
-        dispatch(displaySnackbar({ message: error, type: snackbarTypes.ERROR }));
+        dispatch(displaySnackbar({ message: error.message, type: snackbarTypes.ERROR }));
         dispatch(removeExchangeError());
     }
 };

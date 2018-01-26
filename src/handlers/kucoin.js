@@ -37,7 +37,7 @@ const getAccountInfo = async ({ credentials }) => {
     let accountInfo;
     try {
         accountInfo = await kc.getBalance();
-        await delay(1000);
+        await delay(2000);
         const formattedResult = {
             balances: accountInfo.data.map(item => ({ asset: item.coinType, free: item.balance, locked: item.freezeBalance })),
         };

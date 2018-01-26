@@ -22,18 +22,15 @@ const profileReducer = (state = {
                 ...state,
                 isFetching: false,
             };
-        case actions.states.CRYPTO_ADD_EXCHANGE_LOADING:
-            return {
-                ...state,
-            };
         case actions.states.CRYPTO_ADD_EXCHANGE_SUCCESS:
             return {
                 ...state,
-                exchanges: action.exchanges,
+                exchanges: state.exchanges.concat(action.exchangeAdded.name),
             };
-        case actions.states.CRYPTO_ADD_EXCHANGE_FAILURE:
+        case actions.states.CRYPTO_REMOVE_EXCHANGE_SUCCESS:
             return {
                 ...state,
+                exchanges: state.exchanges.filter(exchange => exchange.name !== action.exchangeRemoved).map(exchange => exchange.name),
             };
         default:
             return state;

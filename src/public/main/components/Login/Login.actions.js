@@ -31,9 +31,7 @@ const submitLogin = credentials => async (dispatch) => {
     try {
         const { status, json } = await userService.login({ ...credentials, email: credentials.email.toLowerCase() });
         if (status !== 200) {
-            throw new SubmissionError({
-                _error: json.message,
-            });
+            throw new SubmissionError({ _error: json.message });
         } else {
             window.localStorage.setItem(localStorageConstants.userId, json._id);
             window.localStorage.setItem(localStorageConstants.token, json.token);
@@ -41,9 +39,9 @@ const submitLogin = credentials => async (dispatch) => {
             dispatch(push(paths.public.loading));
         }
     } catch (error) {
-        throw new SubmissionError({
-            _error: error.errors._error,
-        });
+        const errorMessage = 'Error while trying to login';
+        dispatch(displaySnackbar({ message: errorMessage, type: snackbarTypes.ERROR }));
+        throw new SubmissionError({ _error: errorMessage });
     }
 };
 
@@ -62,8 +60,10 @@ const createUser = ({ credentials }) => async (dispatch) => {
             dispatch(push(paths.public.loading));
         }
     } catch (error) {
-        dispatch(displaySnackbar({ message: error, type: snackbarTypes.ERROR }));
+        const errorMessage = 'Error while trying to create a user';
+        dispatch(displaySnackbar({ message: errorMessage, type: snackbarTypes.ERROR }));
         dispatch(createUserError());
+        throw new SubmissionError({ _error: errorMessage });
     }
 };
 
