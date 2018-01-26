@@ -11,6 +11,12 @@ const addTotals = item => ({
     total: item.data.balances.filter(filterLowCountItems(item.threshold)).reduce((a, b) => a + b.trend.currentPriceUsdt, 0),
 });
 
+
+const getPriceInUsdt = ({ value, action, asset, free, locked }) => {
+    const multiplier = asset === 'ETH' ? 1 : action.ethLastPrice;
+    return value * multiplier * Number.parseFloat(Number.parseFloat(free) + Number.parseFloat(locked));
+};
+
 const exchangeReducer = (state = {
     exchanges: [],
 }, action) => {
@@ -79,21 +85,28 @@ const exchangeReducer = (state = {
                     },
                 })),
             };
+
         case symbolActions.states.CRYPTO_GET_TREND_SUCCESS: {
             const generateTrends = balance => ({
                 ...balance,
                 isLoading: false,
                 trend: {
                     previousPrice: action.trend.previousPrice.value,
-                    previousPriceUsdt:
-                        action.trend.previousPrice.value *
-                        action.ethLastPrice *
-                        Number.parseFloat(Number.parseFloat(balance.free) + Number.parseFloat(balance.locked)),
+                    previousPriceUsdt: getPriceInUsdt(({
+                        value: action.trend.previousPrice.value,
+                        action,
+                        asset: balance.asset,
+                        free: balance.free,
+                        locked: balance.locked,
+                    })),
                     currentPrice: action.trend.currentPrice.value,
-                    currentPriceUsdt:
-                        action.trend.currentPrice.value *
-                        action.ethLastPrice *
-                        Number.parseFloat(Number.parseFloat(balance.free) + Number.parseFloat(balance.locked)),
+                    currentPriceUsdt: getPriceInUsdt(({
+                        value: action.trend.currentPrice.value,
+                        action,
+                        asset: balance.asset,
+                        free: balance.free,
+                        locked: balance.locked,
+                    })),
                 },
             });
 
