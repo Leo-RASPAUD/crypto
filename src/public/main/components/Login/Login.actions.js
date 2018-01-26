@@ -6,16 +6,18 @@ import localStorageConstants from 'constants/localStorage.constants';
 import snackbarTypes from 'utils/snackbarTypes';
 
 const states = {
-    CRYPTO_REQUEST_SUBMIT_LOGIN: 'CRYPTO_REQUEST_SUBMIT_LOGIN',
-    CRYPTO_RECEIVE_LOGIN_SUCCESSFUL: 'CRYPTO_RECEIVE_LOGIN_SUCCESSFUL',
+    CRYPTO_REQUEST_LOGIN_LOADING: 'CRYPTO_REQUEST_LOGIN_LOADING',
+    CRYPTO_REQUEST_LOGIN_SUCCESS: 'CRYPTO_REQUEST_LOGIN_SUCCESS',
+    CRYPTO_REQUEST_LOGIN_FAILURE: 'CRYPTO_REQUEST_LOGIN_FAILURE',
     CRYPTO_REQUEST_SHOW_SNACKBAR: 'CRYPTO_REQUEST_SHOW_SNACKBAR',
     CRYPTO_CREATE_USER_LOADING: 'CRYPTO_CREATE_USER_LOADING',
     CRYPTO_CREATE_USER_SUCCESS: 'CRYPTO_CREATE_USER_SUCCESS',
     CRYPTO_CREATE_USER_FAILURE: 'CRYPTO_CREATE_USER_FAILURE',
 };
 
-const requestSubmitLogin = () => ({ type: states.CRYPTO_REQUEST_SUBMIT_LOGIN });
-const receiveLoginSuccess = () => ({ type: states.CRYPTO_RECEIVE_LOGIN_SUCCESSFUL, loadingApp: true });
+const requestSubmitLogin = () => ({ type: states.CRYPTO_REQUEST_LOGIN_LOADING });
+const receiveLoginSuccess = ({ user }) => ({ type: states.CRYPTO_REQUEST_LOGIN_SUCCESS, user });
+const receiveLoginFailure = () => ({ type: states.CRYPTO_REQUEST_LOGIN_FAILURE, user: null });
 const createUserLoading = () => ({ type: states.CRYPTO_CREATE_USER_LOADING });
 const createUserSuccess = () => ({ type: states.CRYPTO_CREATE_USER_SUCCESS });
 const createUserError = () => ({ type: states.CRYPTO_CREATE_USER_FAILURE });
@@ -31,14 +33,17 @@ const submitLogin = credentials => async (dispatch) => {
     try {
         const { status, json } = await userService.login({ ...credentials, email: credentials.email.toLowerCase() });
         if (status !== 200) {
+            dispatch(receiveLoginFailure());
             throw new SubmissionError({ _error: json.message });
         } else {
             window.localStorage.setItem(localStorageConstants.userId, json._id);
             window.localStorage.setItem(localStorageConstants.token, json.token);
-            dispatch(receiveLoginSuccess());
+            dispatch(receiveLoginSuccess({ user: json }));
+            dispatch(displaySnackbar({ message: 'Welcome back', type: snackbarTypes.SUCCESS }));
             dispatch(push(paths.public.loading));
         }
     } catch (error) {
+        dispatch(receiveLoginFailure());
         const errorMessage = 'Error while trying to login';
         dispatch(displaySnackbar({ message: errorMessage, type: snackbarTypes.ERROR }));
         throw new SubmissionError({ _error: errorMessage });

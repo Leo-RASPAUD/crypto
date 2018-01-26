@@ -4,13 +4,13 @@ import App from './App.component';
 import actions from './App.actions';
 
 const mapStateToProps = state => ({
-    authenticated: state.app.userAuthenticated,
     user: state.app.user,
+    isUserAuthenticated: !!state.app.user,
+    isUserLoading: state.app.isUserLoading,
 });
 
 const mapDispatchToProps = dispatch => ({
-    redirectToLogin: () => dispatch(actions.redirectToLogin()),
-    goToLoading: () => dispatch(actions.goToLoading()),
+    checkCredentials: () => dispatch(actions.checkCredentials()),
     goToProfile: () => dispatch(actions.goToProfile()),
     goToDashboard: () => dispatch(actions.goToDashboard()),
     logout: () => dispatch(actions.logout()),

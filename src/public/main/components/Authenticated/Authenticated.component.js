@@ -5,8 +5,11 @@ import paths from 'components/App/App.paths';
 
 class Authenticated extends React.Component {
     static propTypes = {
-        authenticated: PropTypes.bool.isRequired,
+        authenticated: PropTypes.bool,
         component: PropTypes.func.isRequired,
+    }
+    static defaultProps = {
+        authenticated: false,
     }
     render() {
         const { authenticated, component } = this.props;

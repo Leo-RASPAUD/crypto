@@ -14,7 +14,7 @@ class PopoverUser extends React.Component {
     static propTypes = {
         classes: PropTypes.object.isRequired,
         popoverUserOpened: PropTypes.bool.isRequired,
-        user: PropTypes.object.isRequired,
+        user: PropTypes.object,
         anchorElement: PropTypes.object,
         logout: PropTypes.func.isRequired,
         updateParentState: PropTypes.func.isRequired,
@@ -22,6 +22,7 @@ class PopoverUser extends React.Component {
 
     static defaultProps = {
         anchorElement: null,
+        user: null,
     };
 
     state = {
@@ -55,39 +56,44 @@ class PopoverUser extends React.Component {
             anchorOriginVertical,
             anchorOriginHorizontal,
         } = this.state;
+        const { user } = this.props;
         const { classes } = this.props;
         return (
-            <Popover
-                classes={{ paper: classes.popover }}
-                open={popoverUserOpened}
-                anchorEl={anchorElement}
-                onClose={this.handleRequestClose}
-                anchorOrigin={{
-                    vertical: anchorOriginVertical,
-                    horizontal: anchorOriginHorizontal,
-                }}
-            >
-                <div className={classes.contentWrapper} >
-                    <Avatar className={classes.avatarClass} >
-                        <Icon>account_circle</Icon>
-                    </Avatar>
-                    <div className={classes.username} >
-                        {this.props.user.email}
-                    </div>
-                </div>
-                <div className={classes.buttons} >
-                    <Button
-                        onClick={this.logout}
-                        color="accent"
-                        raised
-                        classes={{
-                            root: classes.signOutButton,
+            <div>
+                {user && (
+                    <Popover
+                        classes={{ paper: classes.popover }}
+                        open={popoverUserOpened}
+                        anchorEl={anchorElement}
+                        onClose={this.handleRequestClose}
+                        anchorOrigin={{
+                            vertical: anchorOriginVertical,
+                            horizontal: anchorOriginHorizontal,
                         }}
                     >
-                        {labels.signOut}
-                    </Button>
-                </div>
-            </Popover>
+                        <div className={classes.contentWrapper} >
+                            <Avatar className={classes.avatarClass} >
+                                <Icon>account_circle</Icon>
+                            </Avatar>
+                            <div className={classes.username} >
+                                {user.email}
+                            </div>
+                        </div>
+                        <div className={classes.buttons} >
+                            <Button
+                                onClick={this.logout}
+                                color="accent"
+                                raised
+                                classes={{
+                                    root: classes.signOutButton,
+                                }}
+                            >
+                                {labels.signOut}
+                            </Button>
+                        </div>
+                    </Popover>
+                )}
+            </div>
         );
     }
 }
