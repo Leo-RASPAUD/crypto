@@ -20,7 +20,8 @@ const appReducer = (state = {
 }, action) => {
     switch (action.type) {
         case loginActions.states.CRYPTO_REQUEST_LOGIN_FAILURE:
-        case loginActions.states.CRYPTO_RECEIVE_LOGIN_SUCCESSFUL:
+        case loginActions.states.CRYPTO_REQUEST_LOGIN_SUCCESS:
+        case loginActions.states.CRYPTO_CREATE_USER_SUCCESS:
         case appActions.states.CRYPTO_REQUEST_CHECK_CREDENTIALS_FAILURE:
         case appActions.states.CRYPTO_REQUEST_CHECK_CREDENTIALS_SUCCESS:
             return {

@@ -49,23 +49,25 @@ const checkCredentials = () => async (dispatch) => {
     const userId = window.localStorage.getItem(localStorageConstants.userId);
     if (userId) {
         dispatch(requestCheckCredentialsLoading());
+        let status;
+        let json;
         try {
-            const { status, json } = await userService.getUserDetails(userId);
-            if (status !== 200) {
-                window.localStorage.removeItem(localStorageConstants.userId);
-                dispatch(requestCheckCredentialsFailure());
-                dispatch(displaySnackbar({ message: json.message, type: snackbarTypes.ERROR }));
-                dispatch(push(paths.public.login));
-            } else {
-                dispatch(requestCheckCredentialsSuccess({ user: json }));
-                dispatch(displaySnackbar({ message: 'Welcome back', type: snackbarTypes.SUCCESS }));
-                dispatch(push(paths.authenticated.dashboard));
-            }
+            ({ status, json } = await userService.getUserDetails(userId));
         } catch (error) {
             window.localStorage.removeItem(localStorageConstants.userId);
             dispatch(requestCheckCredentialsFailure());
             dispatch(displaySnackbar({ message: error.message, type: snackbarTypes.ERROR }));
             dispatch(push(paths.public.login));
+        }
+        if (status !== 200) {
+            window.localStorage.removeItem(localStorageConstants.userId);
+            dispatch(requestCheckCredentialsFailure());
+            dispatch(displaySnackbar({ message: json.message, type: snackbarTypes.ERROR }));
+            dispatch(push(paths.public.login));
+        } else {
+            dispatch(requestCheckCredentialsSuccess({ user: json }));
+            dispatch(displaySnackbar({ message: 'Welcome back', type: snackbarTypes.SUCCESS }));
+            dispatch(push(paths.authenticated.dashboard));
         }
     } else {
         dispatch(requestCheckCredentialsFailure());
