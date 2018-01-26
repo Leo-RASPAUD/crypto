@@ -1,5 +1,4 @@
 /* eslint-disable indent */
-import loadingStates from 'components/LoadingApp/LoadingApp.states';
 import loginActions from 'components/Login/Login.actions';
 import profileActions from 'components/Profile/Profile.actions';
 
@@ -14,14 +13,6 @@ const dashboardReducer = (state = {
                 user: action.user,
                 exchanges: action.exchanges,
                 accountInfo: action.accountInfo,
-            };
-        case loadingStates.CRYPTO_ACCOUNT_INFORMATIONS_SUCCESS:
-            return {
-                ...state,
-                accountInformations: state.accountInformations.concat({
-                    exchangeName: action.exchangeName,
-                    data: action.data,
-                }),
             };
         case profileActions.states.CRYPTO_REMOVE_EXCHANGE_SUCCESS:
             return {

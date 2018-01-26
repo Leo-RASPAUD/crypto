@@ -29,10 +29,10 @@ const displaySnackbar = ({ message, type }) => ({
 });
 
 const logout = () => (dispatch) => {
-    dispatch(requestLogout());
-    window.localStorage.removeItem(localStorageConstants.accessToken);
+    window.localStorage.removeItem(localStorageConstants.token);
     window.localStorage.removeItem(localStorageConstants.userId);
     dispatch(push(paths.public.login));
+    dispatch(requestLogout());
 };
 
 const goToDashboard = () => (dispatch) => {
@@ -71,7 +71,7 @@ const checkCredentials = () => async (dispatch) => {
         }
     } else {
         dispatch(requestCheckCredentialsFailure());
-        window.localStorage.removeItem(localStorageConstants.accessToken);
+        window.localStorage.removeItem(localStorageConstants.token);
         dispatch(push(paths.public.login));
     }
 };

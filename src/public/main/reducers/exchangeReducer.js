@@ -1,36 +1,119 @@
 /* eslint-disable indent */
-import loadingStates from 'components/LoadingApp/LoadingApp.states';
 import loginActions from 'components/Login/Login.actions';
-import profileActions from 'components/Profile/Profile.actions';
+import appActions from 'components/App/App.actions';
+import exchangeActions from 'components/Dashboard/Exchange/Exchange.actions';
+import symbolActions from 'components/Dashboard/Exchange/ExchangePresentation/Symbol/Symbol.actions';
 
-const dashboardReducer = (state = {
-    items: [],
+const filterLowCountItems = threshold => balance => (balance.free > threshold || balance.locked > threshold);
+
+const addTotals = item => ({
+    ...item,
+    total: item.data.balances.filter(filterLowCountItems(item.threshold)).reduce((a, b) => a + b.trend.currentPriceUsdt, 0),
+});
+
+const exchangeReducer = (state = {
+    exchanges: [],
 }, action) => {
     switch (action.type) {
-        case loginActions.states.CRYPTO_RECEIVE_LOGIN_SUCCESSFUL:
+        case loginActions.states.CRYPTO_CREATE_USER_SUCCESS:
+        case loginActions.states.CRYPTO_REQUEST_LOGIN_SUCCESS:
+        case appActions.states.CRYPTO_REQUEST_CHECK_CREDENTIALS_SUCCESS:
             return {
                 ...state,
-                userAuthenticated: !!action.user,
-                user: action.user,
-                exchanges: action.exchanges,
-                accountInfo: action.accountInfo,
+                exchanges: action.user.exchanges.map(exchange => ({ ...exchange, isLoading: true, isError: false, data: {} })) || [],
             };
-        case loadingStates.CRYPTO_ACCOUNT_INFORMATIONS_SUCCESS:
+        case exchangeActions.states.CRYPTO_GET_EXCHANGE_INFORMATIONS_FAILURE:
             return {
                 ...state,
-                accountInformations: state.accountInformations.concat({
-                    exchangeName: action.exchangeName,
-                    data: action.data,
-                }),
+                exchanges: state.exchanges.map(exchange => ({
+                    ...exchange,
+                    total: 0,
+                    isError: exchange.name === action.exchange.name ? true : exchange.isError,
+                    isLoading: exchange.name === action.exchange.name ? false : exchange.isLoading,
+                })) || [],
             };
-        case profileActions.states.CRYPTO_REMOVE_EXCHANGE_SUCCESS:
+        case exchangeActions.states.CRYPTO_GET_EXCHANGE_INFORMATIONS_SUCCESS:
             return {
                 ...state,
-                accountInformations: state.accountInformations.filter(item => item.exchangeName !== action.exchangeRemoved.name),
+                exchanges: state.exchanges.map(exchange => exchange.name !== action.exchange.name ? exchange : ({
+                    ...exchange,
+                    threshold: 0.001,
+                    isLoading: false,
+                    data: {
+                        ...action.exchange.data,
+                        balances: action.exchange.data.balances.map(balance => ({
+                            ...balance,
+                            isLoading: true,
+                            isError: false,
+                            trend: {},
+                        })),
+                    },
+                })) || [],
             };
+        case symbolActions.states.CRYPTO_GET_TREND_FAILURE:
+            return {
+                ...state,
+                exchanges: state.exchanges.map(exchange => exchange.name !== action.exchangeName ? exchange : ({
+                    ...exchange,
+                    data: {
+                        ...exchange.data,
+                        balances: exchange.data.balances.map(balance => balance.asset !== action.symbolBaseName ? balance : ({
+                            ...balance,
+                            isError: true,
+                            isLoading: false,
+                        })),
+                    },
+                })),
+            };
+        case symbolActions.states.CRYPTO_GET_TREND_LOADING:
+            return {
+                ...state,
+                exchanges: state.exchanges.map(exchange => exchange.name !== action.exchangeName ? exchange : ({
+                    ...exchange,
+                    data: {
+                        ...exchange.data,
+                        balances: exchange.data.balances.map(balance => balance.asset !== action.symbolBaseName ? balance : ({
+                            ...balance,
+                            isLoading: true,
+                        })),
+                    },
+                })),
+            };
+        case symbolActions.states.CRYPTO_GET_TREND_SUCCESS: {
+            const generateTrends = balance => ({
+                ...balance,
+                isLoading: false,
+                trend: {
+                    previousPrice: action.trend.previousPrice.value,
+                    previousPriceUsdt:
+                        action.trend.previousPrice.value *
+                        action.ethLastPrice *
+                        Number.parseFloat(Number.parseFloat(balance.free) + Number.parseFloat(balance.locked)),
+                    currentPrice: action.trend.currentPrice.value,
+                    currentPriceUsdt:
+                        action.trend.currentPrice.value *
+                        action.ethLastPrice *
+                        Number.parseFloat(Number.parseFloat(balance.free) + Number.parseFloat(balance.locked)),
+                },
+            });
+
+            let newExchanges = state.exchanges.map(exchange => exchange.name !== action.exchangeName ? exchange : ({
+                ...exchange,
+                data: {
+                    ...exchange.data,
+                    balances: exchange.data.balances.map(balance => balance.asset !== action.symbolBaseName ? balance : generateTrends(balance)),
+                },
+            }));
+            newExchanges = newExchanges.map(item => item.name !== action.exchangeName ? item : addTotals(item));
+
+            return {
+                ...state,
+                exchanges: newExchanges,
+            };
+        }
         default:
             return state;
     }
 };
 
-export default dashboardReducer;
+export default exchangeReducer;

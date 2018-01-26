@@ -4,7 +4,7 @@ import Dashboard from './Dashboard.component';
 import actions from './Dashboard.actions';
 
 const mapStateToProps = state => ({
-    exchanges: state.app.user.exchanges,
+    exchanges: state.exchanges.exchanges,
 });
 
 const mergeProps = (state, { dispatch }, { ...otherProps }) => ({
@@ -13,7 +13,6 @@ const mergeProps = (state, { dispatch }, { ...otherProps }) => ({
     getSymbols: () => dispatch(actions.getSymbols(state.exchanges)),
     getPrices: ({ exchangeName, symbol }) => dispatch(actions.getPrices({ exchangeName, symbol })),
     getLastPrice: ({ exchangeName, symbol }) => dispatch(actions.getLastPrice({ exchangeName, symbol })),
-    getTrend: ({ exchangeName, symbol }) => dispatch(actions.getTrend({ exchangeName, symbol })),
 });
 
 export default withRouter(connect(mapStateToProps, null, mergeProps)(Dashboard));

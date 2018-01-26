@@ -21,7 +21,7 @@ const styles = theme => ({
     symbolTables: {
         display: 'flex',
     },
-    accountInformationsWrapper: {
+    exchangesWrapper: {
         display: 'flex',
     },
     noDataWrapper: {

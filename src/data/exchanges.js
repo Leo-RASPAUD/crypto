@@ -11,6 +11,30 @@ const createPriceObject = prices => prices.map((item) => {
     return { time: item.time, value: 0 };
 });
 
+const getLastPrice = async ({ name, symbol }) => {
+    try {
+        const prices = await Price.aggregate([
+            { $match: { exchange: name } },
+            {
+                $project: {
+                    items: {
+                        $filter: {
+                            input: '$symbols',
+                            as: 'symbol',
+                            cond: { $eq: ['$$symbol.name', symbol] },
+                        },
+                    },
+                    time: '$time',
+                },
+            },
+            { $sort: { time: -1 } },
+            { $limit: 1 },
+        ]);
+        return { symbol, price: createPriceObject(prices)[0].value };
+    } catch (error) {
+        return { symbol, price: 0 };
+    }
+};
 
 const list = async (req, res) => {
     let exchanges;
@@ -34,7 +58,6 @@ const getSymbols = async (req, res) => {
     }
 };
 
-/* eslint-disable no-confusing-arrow */
 const getPrices = async (req, res) => {
     const { name, symbol } = req.params;
     try {
@@ -60,7 +83,6 @@ const getPrices = async (req, res) => {
     }
 };
 
-/* eslint-disable no-confusing-arrow */
 const getTrendInEth = async (req, res) => {
     const { name, symbol } = req.params;
     try {
@@ -81,35 +103,8 @@ const getTrendInEth = async (req, res) => {
             { $sort: { time: -1 } },
             { $limit: 2 },
         ]);
-        res.send({ symbol, prices: createPriceObject(prices) });
-    } catch (error) {
-        console.log(`Error while trying to get the symbols ${name} ${error}`);
-        res.sendStatus(500).json({ _error: `Error code : ${error.code}` });
-    }
-};
-
-/* eslint-disable no-confusing-arrow */
-const getLastPrice = async (req, res) => {
-    const { name, symbol } = req.params;
-    try {
-        const prices = await Price.aggregate([
-            { $match: { exchange: name } },
-            {
-                $project: {
-                    items: {
-                        $filter: {
-                            input: '$symbols',
-                            as: 'symbol',
-                            cond: { $eq: ['$$symbol.name', symbol] },
-                        },
-                    },
-                    time: '$time',
-                },
-            },
-            { $sort: { time: -1 } },
-            { $limit: 1 },
-        ]);
-        res.send({ symbol, prices: createPriceObject(prices)[0].value });
+        const ethLastPrice = await getLastPrice({ name, symbol: 'ETHUSDT' });
+        res.send({ symbol, prices: createPriceObject(prices), ethLastPrice: ethLastPrice.price });
     } catch (error) {
         console.log(`Error while trying to get the symbols ${name} ${error}`);
         res.sendStatus(500).json({ _error: `Error code : ${error.code}` });
