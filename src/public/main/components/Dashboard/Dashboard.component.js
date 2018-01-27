@@ -2,16 +2,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
+import Paper from 'material-ui/Paper';
 import Exchange from './Exchange/Exchange.container';
 // import { CircularProgress } from 'material-ui/Progress';
-// import Paper from 'material-ui/Paper';
 
 // import SymbolTable from './SymbolTable/SymbolTable.component';
 // import Chart from './Chart/Chart.component';
 // import AccountInformations from './AccountInformations/AccountInformations.component';
 
 import styles from './Dashboard.styles';
-// import labels from './Dashboard.labels';
+import labels from './Dashboard.labels';
 
 @withStyles(styles)
 class Dashboard extends React.Component {
@@ -22,9 +22,20 @@ class Dashboard extends React.Component {
 
     render() {
         const { classes, exchanges } = this.props;
-        console.log(exchanges);
         return (
             <div>
+                {exchanges.length === 0 && (
+                    <div className={classes.noDataWrapper}>
+                        <Paper className={classes.noData}>
+                            <div>
+                                {labels.welcome}
+                            </div>
+                            <div style={{ paddingTop: 50 }}>
+                                {labels.goToProfile}
+                            </div>
+                        </Paper>
+                    </div>
+                )}
                 <div className={classes.exchangesWrapper}>
                     {exchanges.map(exchange => (
                         <Exchange

@@ -24,6 +24,7 @@ class AddExchangeDialog extends React.Component {
         exchanges: PropTypes.array.isRequired,
         open: PropTypes.bool.isRequired,
         addExchange: PropTypes.func.isRequired,
+        updateParentState: PropTypes.func.isRequired,
     };
 
     state = {
@@ -55,13 +56,15 @@ class AddExchangeDialog extends React.Component {
     }
 
     handleSubmit = () => {
-        this.props.addExchange({
+        const { addExchange, updateParentState } = this.props;
+        addExchange({
             exchange: {
                 name: this.state.selectedExchange,
                 apiKey: this.state.apiKey,
                 apiSecret: this.state.apiSecret,
             },
         });
+        updateParentState({ isDialogOpen: false });
         this.setState({ open: false, apiKey: '', apiSecret: '' });
     }
 

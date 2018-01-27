@@ -2,6 +2,7 @@
 import loginActions from 'components/Login/Login.actions';
 import appActions from 'components/App/App.actions';
 import exchangeActions from 'components/Dashboard/Exchange/Exchange.actions';
+import profileActions from 'components/Profile/Profile.actions';
 import symbolActions from 'components/Dashboard/Exchange/ExchangePresentation/Symbol/Symbol.actions';
 
 const filterLowCountItems = threshold => balance => (balance.free > threshold || balance.locked > threshold);
@@ -11,11 +12,33 @@ const addTotals = item => ({
     total: item.data.balances.filter(filterLowCountItems(item.threshold)).reduce((a, b) => a + b.trend.currentPriceUsdt, 0),
 });
 
-
 const getPriceInUsdt = ({ value, action, asset, free, locked }) => {
     const multiplier = asset === 'ETH' ? 1 : action.ethLastPrice;
     return value * multiplier * Number.parseFloat(Number.parseFloat(free) + Number.parseFloat(locked));
 };
+
+const generateTrends = ({ action, balance }) => ({
+    ...balance,
+    isLoading: false,
+    trend: {
+        previousPrice: action.trend.previousPrice.value,
+        previousPriceUsdt: getPriceInUsdt(({
+            value: action.trend.previousPrice.value,
+            action,
+            asset: balance.asset,
+            free: balance.free,
+            locked: balance.locked,
+        })),
+        currentPrice: action.trend.currentPrice.value,
+        currentPriceUsdt: getPriceInUsdt(({
+            value: action.trend.currentPrice.value,
+            action,
+            asset: balance.asset,
+            free: balance.free,
+            locked: balance.locked,
+        })),
+    },
+});
 
 const exchangeReducer = (state = {
     exchanges: [],
@@ -86,35 +109,28 @@ const exchangeReducer = (state = {
                 })),
             };
 
-        case symbolActions.states.CRYPTO_GET_TREND_SUCCESS: {
-            const generateTrends = balance => ({
-                ...balance,
-                isLoading: false,
-                trend: {
-                    previousPrice: action.trend.previousPrice.value,
-                    previousPriceUsdt: getPriceInUsdt(({
-                        value: action.trend.previousPrice.value,
-                        action,
-                        asset: balance.asset,
-                        free: balance.free,
-                        locked: balance.locked,
-                    })),
-                    currentPrice: action.trend.currentPrice.value,
-                    currentPriceUsdt: getPriceInUsdt(({
-                        value: action.trend.currentPrice.value,
-                        action,
-                        asset: balance.asset,
-                        free: balance.free,
-                        locked: balance.locked,
-                    })),
-                },
-            });
+        case profileActions.states.CRYPTO_ADD_EXCHANGE_SUCCESS:
+            return {
+                ...state,
+                exchanges: state.exchanges.concat({
+                    ...action.exchange,
+                    threshold: 0.001,
+                    isLoading: true,
+                    data: {},
+                }),
+            };
+        case profileActions.states.CRYPTO_REMOVE_EXCHANGE_SUCCESS:
+            return {
+                ...state,
+                exchanges: state.exchanges.filter(exchange => exchange.name !== action.exchangeName),
+            };
 
+        case symbolActions.states.CRYPTO_GET_TREND_SUCCESS: {
             let newExchanges = state.exchanges.map(exchange => exchange.name !== action.exchangeName ? exchange : ({
                 ...exchange,
                 data: {
                     ...exchange.data,
-                    balances: exchange.data.balances.map(balance => balance.asset !== action.symbolBaseName ? balance : generateTrends(balance)),
+                    balances: exchange.data.balances.map(balance => balance.asset !== action.symbolBaseName ? balance : generateTrends({ action, balance })),
                 },
             }));
             newExchanges = newExchanges.map(item => item.name !== action.exchangeName ? item : addTotals(item));

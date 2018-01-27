@@ -52,14 +52,27 @@ class SymbolPresentation extends React.Component {
                     </div>
                 </div>
                 <div className={classes.iconWrapper} >
-                    {symbol.isLoading && <CircularProgress color="primary" size={24} />}
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        {symbol.isLoading && <CircularProgress color="primary" size={24} />}
+                        {symbol.isLoading && <CircularProgress color="primary" size={24} />}
+                    </div>
                     {!symbol.isLoading && (
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Icon style={{ marginRight: 5 }} className={classes[symbol.cssClass]}>
-                                {symbol.icon}
-                            </Icon>
-                            <div>
-                                ${symbol.trend.currentPriceUsdt.toFixed(4)}
+                        <div>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Icon style={{ marginRight: 5 }} className={classes[symbol.cssClass]}>
+                                    {symbol.icon}
+                                </Icon>
+                                <div>
+                                    ${symbol.trend.currentPrice.toFixed(4)}
+                                </div>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <Icon color="primary" style={{ marginRight: 5 }}>
+                                    credit_card
+                                </Icon>
+                                <div>
+                                    ${symbol.trend.currentPriceUsdt.toFixed(4)}
+                                </div>
                             </div>
                         </div>
                     )}

@@ -1,4 +1,4 @@
-const styles = theme => ({
+const styles = () => ({
     table: {
     },
     exchanges: {
@@ -32,13 +32,11 @@ const styles = theme => ({
     noData: {
         display: 'flex',
         flexDirection: 'column',
-        textAlign: 'justify',
         alignItems: 'center',
         justifyContent: 'center',
         height: 200,
         width: 400,
         padding: 25,
-        color: theme.palette.primary['500'],
         opacity: 0.75,
         fontSize: 18,
     },

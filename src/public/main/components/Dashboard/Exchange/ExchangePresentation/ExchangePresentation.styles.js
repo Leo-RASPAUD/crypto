@@ -35,7 +35,7 @@ export default () => ({
         display: 'flex',
         width: 750,
         padding: 10,
-        height: 190,
+        height: 220,
         overflowY: 'auto',
     },
 });

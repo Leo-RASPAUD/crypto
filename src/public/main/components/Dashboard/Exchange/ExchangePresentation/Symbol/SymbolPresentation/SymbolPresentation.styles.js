@@ -15,7 +15,7 @@ export default () => ({
         boxShadow: '0px 1px 5px 0px rgba(0, 0, 0, 0.25), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12)',
         cursor: 'pointer',
         width: 200,
-        height: 45,
+        height: 65,
         transition: 'all 0.15s ease-in-out',
         '&:hover': {
             transform: 'scale(1.1)',

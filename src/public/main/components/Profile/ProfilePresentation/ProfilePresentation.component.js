@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Icon from 'material-ui/Icon';
+import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import classnames from 'classnames';
 
@@ -38,13 +39,24 @@ class ProfilePresentation extends React.Component {
         this.setState({ isDialogOpen: true });
     }
 
+    updateParentState = (props) => {
+        this.setState(props);
+    }
+
     render() {
         const { classes, addExchange, removeExchange } = this.props;
         const { user, exchanges, isDialogOpen } = this.state;
         const exchangesToAdd = exchanges.filter(item => !this.props.user.exchanges.find(userExchange => userExchange.name === item));
         return (
             <div className={classes.root}>
-                {exchangesToAdd.length > 0 && (<AddExchangeDialog open={isDialogOpen} exchanges={exchangesToAdd} user={user} addExchange={addExchange} />)}
+                {exchangesToAdd.length > 0 && (<AddExchangeDialog
+                    open={isDialogOpen}
+                    exchanges={exchangesToAdd}
+                    user={user}
+                    addExchange={addExchange}
+                    updateParentState={this.updateParentState}
+                />
+                )}
                 <div className={classes.profileTitle} >
                     {labels.profile}
                 </div>
@@ -66,12 +78,18 @@ class ProfilePresentation extends React.Component {
                             <div className={classes.item} key={`${index}${exchange.name}`} >
                                 <Icon color="primary" className={classes.icon} >compare_arrows</Icon>
                                 <span style={{ flex: 1 }}>{exchange.name}</span>
-                                <IconButton className={classes.removeIcon} onClick={() => removeExchange({ exchangeName: exchange.name })}>clear</IconButton>
+                                <IconButton
+                                    className={classes.removeIcon}
+                                    onClick={() => removeExchange({ exchangeName: exchange.name })}
+                                >
+                                    clear
+                                </IconButton>
                             </div>
                         ))}
-                        <div
+                        <Button
                             className={classnames(classes.item, classes.addNewExchange)}
                             onClick={this.openAddExchangeDialog}
+                            disabled={exchangesToAdd.length === 0}
                         >
                             <Icon
                                 className={classes.icon}
@@ -80,7 +98,7 @@ class ProfilePresentation extends React.Component {
                                 add
                             </Icon>
                             <span>{labels.addNewExchange}</span>
-                        </div>
+                        </Button>
                     </Paper>
                 </div>
             </div>

@@ -1,12 +1,14 @@
+import cssConstants from 'constants/css.constants.js';
+
 const styles = theme => ({
     removeIcon: {
         color: '#f44336',
-        cursor: 'pointer',
+        ...cssConstants.cursor.pointer,
     },
     root: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
+        ...cssConstants.display.flex,
+        ...cssConstants.flexDirection.column,
+        ...cssConstants.alignItems.center,
         marginTop: 25,
     },
     profileTitle: {
@@ -30,8 +32,8 @@ const styles = theme => ({
         opacity: 0.75,
     },
     item: {
-        display: 'flex',
-        alignItems: 'center',
+        ...cssConstants.display.flex,
+        ...cssConstants.alignItems.center,
         padding: 15,
     },
     icon: {
@@ -39,9 +41,10 @@ const styles = theme => ({
         opacity: 0.75,
     },
     addNewExchange: {
-        cursor: 'pointer',
         transition: 'all 0.25s ease-in-out',
-        '&:hover': {
+        width: '100%',
+        ...cssConstants.justifyContent.baseline,
+        '&:hover:not([disabled])': {
             backgroundColor: 'rgba(33, 150, 243, 0.1)',
         },
     },
