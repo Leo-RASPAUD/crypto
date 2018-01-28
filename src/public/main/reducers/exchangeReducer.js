@@ -13,7 +13,6 @@ const addTotals = item => ({
 });
 
 const getPriceInUsdt = ({ value, action, asset, free, locked }) => {
-    console.log(asset, action);
     const multiplier = (asset === 'ETH' || asset === 'USDT') ? 1 : action.ethLastPrice;
     const valueMultiplier = (asset === 'USDT') ? 1 : value;
     return valueMultiplier * multiplier * Number.parseFloat(Number.parseFloat(free) + Number.parseFloat(locked));

@@ -21,6 +21,7 @@ module.exports = {
         db_port: process.env.DB_PORT || '54621',
         db_name: process.env.DB_NAME || 'crypto',
         debug_react: process.env.DEBUG_REACT || true,
+        slackHook: process.env.SLACK_HOOK || 'null',
     },
     exposeApiParams,
 };
