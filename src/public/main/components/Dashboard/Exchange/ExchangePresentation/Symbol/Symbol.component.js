@@ -12,7 +12,7 @@ class Symbol extends React.Component {
 
     componentDidMount = async () => {
         this.refreshValues();
-        this.interval = setInterval(this.refreshValues, 10000);
+        this.interval = setInterval(this.refreshValues, 60000);
     }
 
     componentWillUnmount() {
