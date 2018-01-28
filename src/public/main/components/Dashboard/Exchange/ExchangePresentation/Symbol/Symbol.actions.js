@@ -5,10 +5,17 @@ const states = {
     CRYPTO_GET_TREND_LOADING: 'CRYPTO_GET_TREND_LOADING',
     CRYPTO_GET_TREND_FAILURE: 'CRYPTO_GET_TREND_FAILURE',
     CRYPTO_GET_TREND_SUCCESS: 'CRYPTO_GET_TREND_SUCCESS',
+    CRYPTO_GET_PRICES_LOADING: 'CRYPTO_GET_PRICES_LOADING',
+    CRYPTO_GET_PRICES_FAILURE: 'CRYPTO_GET_PRICES_FAILURE',
+    CRYPTO_GET_PRICES_SUCCESS: 'CRYPTO_GET_PRICES_SUCCESS',
 };
+
 
 const getTrendLoading = ({ exchangeName, symbolBaseName }) => ({ type: states.CRYPTO_GET_TREND_LOADING, symbolBaseName, exchangeName });
 const getTrendFailure = ({ exchangeName, symbolBaseName }) => ({ type: states.CRYPTO_GET_TREND_FAILURE, exchangeName, symbolBaseName });
+const getPricesLoading = () => ({ type: states.CRYPTO_GET_PRICES_LOADING });
+const getPricesSuccess = ({ prices }) => ({ type: states.CRYPTO_GET_PRICES_SUCCESS, prices });
+const getPricesFailure = () => ({ type: states.CRYPTO_GET_PRICES_FAILURE });
 const getTrendSuccess = ({ exchangeName, symbolBaseName, trend, ethLastPrice }) => ({
     type: states.CRYPTO_GET_TREND_SUCCESS,
     exchangeName,
@@ -23,12 +30,16 @@ const displaySnackbar = ({ message, type }) => ({
     snackbarType: type,
 });
 
-const getTrend = ({ exchangeName, symbol, symbolBaseName }) => async (dispatch) => {
+const getTrend = ({ exchangeName, symbol }) => async (dispatch) => {
+    let symbolToSearch = 'ETHUSDT';
+    if (symbol.asset !== 'ETH' && symbol.asset !== 'USDT') {
+        symbolToSearch = `${symbol.asset}ETH`;
+    }
+    const symbolBaseName = symbol.asset;
     dispatch(getTrendLoading({ exchangeName, symbolBaseName }));
     let status;
     let json;
     try {
-        const symbolToSearch = symbolBaseName === 'USDT' ? 'ETHUSDT' : symbol;
         ({ status, json } = await exchangeService.getTrend({ exchangeName, symbol: symbolToSearch }));
     } catch (error) {
         dispatch(getTrendFailure({ symbolBaseName, exchangeName }));
@@ -50,7 +61,30 @@ const getTrend = ({ exchangeName, symbol, symbolBaseName }) => async (dispatch) 
     }
 };
 
+const getPrices = ({ exchangeName, symbol }) => async (dispatch) => {
+    dispatch(getPricesLoading());
+    let status;
+    let json;
+    let symbolToSearch = 'ETHUSDT';
+    if (symbol.asset !== 'ETH' && symbol.asset !== 'USDT') {
+        symbolToSearch = `${symbol.asset}ETH`;
+    }
+    try {
+        ({ json, status } = await exchangeService.getPrices({ exchangeName, symbol: symbolToSearch }));
+    } catch (error) {
+        dispatch(getPricesFailure());
+        dispatch(displaySnackbar({ message: error.message, type: snackbarTypes.ERROR }));
+    }
+    if (status !== 200) {
+        dispatch(getPricesFailure());
+        dispatch(displaySnackbar({ message: json.message, type: snackbarTypes.ERROR }));
+    } else {
+        dispatch(getPricesSuccess({ prices: json }));
+    }
+};
+
 export default {
     states,
     getTrend,
+    getPrices,
 };

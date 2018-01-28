@@ -26,7 +26,7 @@ settings.initEnvironmentVariables().then(() => {
         applyMiddleware(thunkMiddleware),
         applyMiddleware(routerMiddleware(history)),
         applyMiddleware(loadingBarMiddleware({ promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'FAILURE'] })),
-        ...(process.env.DEBUG_REACT ? [window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION__()] : {}),
+        ...(window.DEBUG_REACT ? [window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION__()] : {}),
     ];
 
     const store = createStore(

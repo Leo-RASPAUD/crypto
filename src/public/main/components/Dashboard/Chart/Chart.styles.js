@@ -7,6 +7,8 @@ const trending = {
 export default () => ({
     paperWrapper: {
         margin: 25,
+        width: 750,
+        padding: 10,
     },
     title: {
         fontSize: 18,

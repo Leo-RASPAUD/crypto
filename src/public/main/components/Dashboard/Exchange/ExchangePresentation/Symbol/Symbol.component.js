@@ -7,7 +7,7 @@ class Symbol extends React.Component {
         symbol: PropTypes.object.isRequired,
         exchangeName: PropTypes.string.isRequired,
         getTrend: PropTypes.func.isRequired,
-        displaySymbolPrices: PropTypes.func.isRequired,
+        getPrices: PropTypes.func.isRequired,
     };
 
     componentDidMount = async () => {
@@ -21,16 +21,12 @@ class Symbol extends React.Component {
 
     refreshValues = async () => {
         const { symbol, getTrend } = this.props;
-        let symbolToSearch = 'ETHUSDT';
-        if (symbol.asset !== 'ETH') {
-            symbolToSearch = `${symbol.asset}ETH`;
-        }
-        getTrend({ exchangeName: this.props.exchangeName, symbol: symbolToSearch, symbolBaseName: symbol.asset });
+        getTrend({ exchangeName: this.props.exchangeName, symbol });
     }
 
     render() {
-        const { symbol, exchangeName, displaySymbolPrices } = this.props;
-        return <SymbolPresentation symbol={symbol} exchangeName={exchangeName} displaySymbolPrices={displaySymbolPrices} />;
+        const { symbol, exchangeName, getPrices } = this.props;
+        return <SymbolPresentation symbol={symbol} exchangeName={exchangeName} getPrices={getPrices} />;
     }
 }
 
