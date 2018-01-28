@@ -1,6 +1,7 @@
 const passport = require('passport');
 const User = require('../models/User/User');
 const validator = require('email-validator');
+const slack = require('../utils/slack');
 const exchangeHandler = require('../handlers/exchanges');
 
 const listUsers = async (req, res) => {
@@ -61,6 +62,7 @@ const createUser = async (req, res) => {
         let newUser;
         try {
             newUser = await user.save();
+            slack.post(`New user created : ${email}`);
             res.json(newUser);
         } catch (error) {
             if (error.code === 11000) {
@@ -85,6 +87,7 @@ const login = (req, res, next) => {
             if (loginErr) {
                 return next(loginErr);
             }
+            slack.post(`User connected : ${user.email}`);
             return res.status(200).send(user);
         });
     })(req, res, next);
