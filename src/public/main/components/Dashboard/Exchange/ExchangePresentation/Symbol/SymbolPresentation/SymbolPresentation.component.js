@@ -33,7 +33,7 @@ class SymbolPresentation extends React.Component {
         return (
             <Paper
                 className={classes.asset}
-                onClick={() => getPrices({ exchangeName, symbol })}
+                onClick={() => symbol.asset !== 'EUR' && getPrices({ exchangeName, symbol })}
             >
                 <div className={classes.iconWrapper}>
                     <div style={{ position: 'relative' }}>
@@ -59,7 +59,7 @@ class SymbolPresentation extends React.Component {
                         {symbol.isLoading && <CircularProgress color="primary" size={24} />}
                         {symbol.isLoading && <CircularProgress color="primary" size={24} />}
                     </div>
-                    {!symbol.isLoading && (
+                    {!symbol.isLoading && symbol.asset !== 'EUR' && (
                         <div>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 <Icon style={{ marginRight: 5 }} className={classes[symbol.cssClass]}>

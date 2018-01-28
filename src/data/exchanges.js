@@ -54,7 +54,7 @@ const getSymbols = async (req, res) => {
         res.send({ exchange: exchangeName, symbols: prices.symbols.map(symbol => symbol.name).sort() });
     } catch (error) {
         console.log(`Error while trying to get the symbols ${exchangeName} ${error}`);
-        res.sendStatus(500).json({ _error: `Error code : ${error.code}` });
+        res.sendStatus(500).json({ message: `Error code : ${error.code}` });
     }
 };
 

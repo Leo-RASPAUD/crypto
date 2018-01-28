@@ -20,11 +20,13 @@
     ]
   },
   "dependencies": {
+    "axios": "^0.17.1",
     "babel-runtime": "^6.26.0",
     "bcrypt-nodejs": "^0.0.3",
     "binance-api-node": "^0.5.0",
     "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
+    "coinbase": "^2.0.7",
     "compression": "^1.7.1",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",

@@ -100,6 +100,6 @@ app.get('*', (req, res) => {
 app.listen(conf.params.port, async () => {
     setInterval(() => {
         exchangesHandler.getData();
-    }, 30000);
+    }, 5000);
     console.log(`Backend runing on port : ${conf.params.port}`);
 });

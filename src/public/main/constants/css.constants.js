@@ -53,6 +53,11 @@ export default {
             display: 'block',
         },
     },
+    flexWrap: {
+        wrap: {
+            flexWrap: 'wrap',
+        },
+    },
     flexDirection: {
         row: {
             flexDirection: 'row',

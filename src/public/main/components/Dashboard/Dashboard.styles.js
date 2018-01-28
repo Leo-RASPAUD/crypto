@@ -1,3 +1,5 @@
+import cssConstants from 'constants/css.constants';
+
 const styles = () => ({
     table: {
     },
@@ -23,6 +25,7 @@ const styles = () => ({
     },
     exchangesWrapper: {
         display: 'flex',
+        ...cssConstants.flexWrap.wrap,
     },
     noDataWrapper: {
         display: 'flex',
