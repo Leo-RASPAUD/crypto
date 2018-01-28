@@ -19,10 +19,12 @@ class SymbolPresentation extends React.Component {
         classes: PropTypes.object.isRequired,
         symbol: PropTypes.object.isRequired,
         exchangeName: PropTypes.string.isRequired,
+        displaySymbolPrices: PropTypes.func.isRequired,
     };
 
     render() {
-        const { classes, symbol, exchangeName } = this.props;
+        const { classes, symbol, exchangeName, displaySymbolPrices } = this.props;
+        console.log(displaySymbolPrices);
         console.log(exchangeName);
         const { cssClass, icon } = ExchangePresentation.getCssTrends({
             previousPrice: symbol.trend.previousPrice,
@@ -63,7 +65,7 @@ class SymbolPresentation extends React.Component {
                                     {symbol.icon}
                                 </Icon>
                                 <div>
-                                    ${symbol.trend.currentPrice.toFixed(4)}
+                                    ${symbol.trend.currentPrice.toFixed(6)}
                                 </div>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center' }}>

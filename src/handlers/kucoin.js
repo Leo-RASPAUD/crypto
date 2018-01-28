@@ -33,40 +33,47 @@ const getData = async () => {
 const getAccountInfo = async ({ credentials }) => {
     console.log('Getting Kucoin account informations...');
     const kc = new Kucoin(credentials.apiKey, credentials.apiSecret);
-    const promises = [];
-    let accountInfo;
     try {
-        accountInfo = await kc.getBalance();
-        await delay(2000);
-        const formattedResult = {
-            balances: accountInfo.data.map(item => ({ asset: item.coinType, free: item.balance, locked: item.freezeBalance })),
-        };
-        formattedResult.balances.filter(item => (item.free > 0.001 || item.locked > 0.001)).map((balanceItem) => {
-            const pair = balanceItem.asset === 'ETH' || balanceItem.asset === 'BTC' ? `${balanceItem.asset}-USDT` : `${balanceItem.asset}-ETH`;
-            return promises.push(kc.getDealtOrders({ pair }));
-        });
-
+        const prices = await kc.getTicker({ pair: '' });
+        const symbolKeys = prices.data.map(price => price.symbol);
+        const promises = [];
+        let accountInfo;
         try {
-            formattedResult.orders = await Promise.all(promises);
-            formattedResult.orders = formattedResult.orders
-                .filter(itemFilter => itemFilter.data.datas.length > 0)
-                .map(item => item.data.datas)
-                .map(itemMapArray => itemMapArray.map(itemMap => ({ ...itemMap, pair: `${itemMap.coinType}${itemMap.coinTypePair}` })));
-            return Promise.resolve(formattedResult);
+            accountInfo = await kc.getBalance();
+            await delay(2000);
+            const formattedResult = {
+                balances: accountInfo.data.map(item => ({ asset: item.coinType, free: item.balance, locked: item.freezeBalance })),
+            };
+            formattedResult.balances.filter(item => (item.free > 0.001 || item.locked > 0.001)).map((balanceItem) => {
+                let pair;
+                if (symbolKeys.includes(`${balanceItem.asset}-ETH`)) {
+                    pair = `${balanceItem.asset}-ETH`;
+                } else {
+                    pair = symbolKeys.includes(`${balanceItem.asset}-USDT`) ? `${balanceItem.asset}-USDT` : `ETH-${balanceItem.asset}`;
+                }
+                return promises.push(kc.getDealtOrders({ pair }));
+            });
+
+            try {
+                formattedResult.orders = await Promise.all(promises);
+                formattedResult.orders = formattedResult.orders
+                    .filter(itemFilter => itemFilter.data.datas.length > 0)
+                    .map(item => item.data.datas)
+                    .map(itemMapArray => itemMapArray.map(itemMap => ({ ...itemMap, pair: `${itemMap.coinType}${itemMap.coinTypePair}` })));
+                return Promise.resolve(formattedResult);
+            } catch (error) {
+                console.log(error);
+                return Promise.reject(error);
+            }
         } catch (error) {
-            console.log(error);
+            console.log('Kucoin.getAccountInfo.getBalance:', error);
             return Promise.reject(error);
         }
     } catch (error) {
-        console.log('Kucoin.getAccountInfo:', error);
+        console.log('Kucoin.getAccountInfo.getTicker:', error);
         return Promise.reject(error);
     }
 };
-
-async function sleep(fn, ...args) {
-    await timeout(3000);
-    return fn(...args);
-}
 
 module.exports = {
     getData,

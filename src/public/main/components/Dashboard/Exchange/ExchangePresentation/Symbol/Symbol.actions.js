@@ -28,7 +28,8 @@ const getTrend = ({ exchangeName, symbol, symbolBaseName }) => async (dispatch) 
     let status;
     let json;
     try {
-        ({ status, json } = await exchangeService.getTrend({ exchangeName, symbol }));
+        const symbolToSearch = symbolBaseName === 'USDT' ? 'ETHUSDT' : symbol;
+        ({ status, json } = await exchangeService.getTrend({ exchangeName, symbol: symbolToSearch }));
     } catch (error) {
         dispatch(getTrendFailure({ symbolBaseName, exchangeName }));
         dispatch(displaySnackbar({ message: error.message, type: snackbarTypes.ERROR }));

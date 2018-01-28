@@ -7,6 +7,7 @@ class Symbol extends React.Component {
         symbol: PropTypes.object.isRequired,
         exchangeName: PropTypes.string.isRequired,
         getTrend: PropTypes.func.isRequired,
+        displaySymbolPrices: PropTypes.func.isRequired,
     };
 
     componentDidMount = async () => {
@@ -28,8 +29,8 @@ class Symbol extends React.Component {
     }
 
     render() {
-        const { symbol, exchangeName } = this.props;
-        return <SymbolPresentation symbol={symbol} exchangeName={exchangeName} />;
+        const { symbol, exchangeName, displaySymbolPrices } = this.props;
+        return <SymbolPresentation symbol={symbol} exchangeName={exchangeName} displaySymbolPrices={displaySymbolPrices} />;
     }
 }
 

@@ -16,7 +16,6 @@ class Chart extends React.Component {
         prices: PropTypes.array.isRequired,
     };
 
-    /* eslint-disable no-nested-ternary */
     render() {
         const { classes, symbol, prices } = this.props;
         let previousPrice = 0;

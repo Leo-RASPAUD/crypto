@@ -5,6 +5,7 @@ import actions from './Dashboard.actions';
 
 const mapStateToProps = state => ({
     exchanges: state.exchanges.exchanges,
+    prices: state.dashboard.prices,
 });
 
 const mergeProps = (state, { dispatch }, { ...otherProps }) => ({

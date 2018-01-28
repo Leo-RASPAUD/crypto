@@ -13,8 +13,9 @@ const addTotals = item => ({
 });
 
 const getPriceInUsdt = ({ value, action, asset, free, locked }) => {
-    const multiplier = asset === 'ETH' ? 1 : action.ethLastPrice;
-    return value * multiplier * Number.parseFloat(Number.parseFloat(free) + Number.parseFloat(locked));
+    const multiplier = (asset === 'ETH' || asset === 'USDT') ? 1 : action.ethLastPrice;
+    const valueMultiplier = (asset === 'ETH' || asset === 'USDT') ? 1 : value;
+    return valueMultiplier * multiplier * Number.parseFloat(Number.parseFloat(free) + Number.parseFloat(locked));
 };
 
 const generateTrends = ({ action, balance }) => ({
