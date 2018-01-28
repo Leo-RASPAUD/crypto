@@ -27,7 +27,7 @@ mongoose.Promise = global.Promise;
 app.use(cors({
     origin: [
         'http://localhost:8082',
-        `http://${conf.params.host}:${conf.params.port}`,
+        `http://${conf.params.host}`,
     ],
     credentials: true,
 }));
