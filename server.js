@@ -25,7 +25,10 @@ const mongoStore = new MongooseStore({ connection: mongoose });
 mongoose.Promise = global.Promise;
 
 app.use(cors({
-    origin: ['http://localhost:8082', 'http://52.63.124.6:8085'],
+    origin: [
+        'http://localhost:8082',
+        `http://${conf.params.host}:${conf.params.port}`,
+    ],
     credentials: true,
 }));
 
@@ -38,7 +41,7 @@ app.use(session({
     resave: true,
     saveUninitialized: false,
     store: mongoStore,
-    cookie: { domain: 'localhost' },
+    cookie: { domain: `${conf.params.host}` },
     key: 'sessionId',
 }));
 
