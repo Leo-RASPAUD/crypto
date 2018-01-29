@@ -52,6 +52,10 @@ app.use(passport.session());
 app.use(compression());
 
 
+// Cert
+app.get('/health-check', (req, res) => res.sendStatus(200));
+
+
 // Endpoints
 app.post('/login', userEndpoints.login);
 
@@ -78,6 +82,7 @@ app.get('/getApiParams', (_, res) => {
 
 app.use('/', express.static(path.join(__dirname, './src/public/index.html')));
 app.use('/assets', express.static(path.join(__dirname, './dist')));
+app.use('/.well-known/acme-challenge', express.static(path.join(__dirname, './dist')));
 
 const indexPath = path.join(__dirname, './src/public/index.html');
 
