@@ -44,12 +44,14 @@ const getAccountInfo = async ({ credentials }) => {
             const formattedResult = {
                 balances: accountInfo.data.map(item => ({ asset: item.coinType, free: item.balance, locked: item.freezeBalance })),
             };
-            formattedResult.balances.filter(item => (item.free > 0.001 || item.locked > 0.001)).map((balanceItem) => {
+            formattedResult.balances.filter(item => item.free > 0.001 || item.locked > 0.001).map(balanceItem => {
                 let pair;
                 if (symbolKeys.includes(`${balanceItem.asset}-ETH`)) {
                     pair = `${balanceItem.asset}-ETH`;
                 } else {
-                    pair = symbolKeys.includes(`${balanceItem.asset}-USDT`) ? `${balanceItem.asset}-USDT` : `ETH-${balanceItem.asset}`;
+                    pair = symbolKeys.includes(`${balanceItem.asset}-USDT`)
+                        ? `${balanceItem.asset}-USDT`
+                        : symbolKeys.includes(`${balanceItem.asset}-BTC`) ? `${balanceItem.asset}-BTC` : `ETH-${balanceItem.asset}`;
                 }
                 return promises.push(kc.getDealtOrders({ pair }));
             });

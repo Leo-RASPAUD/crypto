@@ -57,39 +57,9 @@ const getAccountInfo = async ({ credentials }) => {
             resolve(returnObject);
         });
     });
-    // const symbolKeys = Object.keys(prices);
-    // let accountInfo;
-    // const promises = [];
-    // try {
-    //     accountInfo = await clientCoinbase.accountInfo();
-    //     accountInfo.balances.filter(item => (item.free > 0.001 || item.locked > 0.001)).map((balanceItem) => {
-    //         let symbol;
-    //         if (symbolKeys.includes(`${balanceItem.asset}ETH`)) {
-    //             symbol = `${balanceItem.asset}ETH`;
-    //         } else {
-    //             symbol = symbolKeys.includes(`${balanceItem.asset}USDT`) ? `${balanceItem.asset}USDT` : `ETH${balanceItem.asset}`;
-    //         }
-    //         return promises.push(clientCoinbase.allOrders({ symbol }));
-    //     });
-    //     try {
-    //         accountInfo.orders = await Promise.all(promises);
-    //         accountInfo.orders = accountInfo.orders
-    //             .map(order => order.filter(item => item.side === 'BUY'))
-    //             .map(itemMapArray => itemMapArray.map(itemMap => ({ ...itemMap, dealPrice: itemMap.price, pair: itemMap.symbol })));
-    //         return Promise.resolve(accountInfo);
-    //     } catch (error) {
-    //         console.log(error);
-    //         return Promise.reject(error);
-    //     }
-    // } catch (error) {
-    //     console.log('Coinbase.getAccountInfo:', error);
-    //     return Promise.reject(error);
-    // }
 };
-
 
 module.exports = {
     getData,
     getAccountInfo,
 };
-

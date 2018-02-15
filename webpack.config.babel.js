@@ -13,10 +13,7 @@ const config = {
             constants: path.resolve(__dirname, './src/public/main/constants'),
         },
         extensions: ['.js'],
-        modules: [
-            path.resolve(__dirname, './node_modules'),
-            path.resolve(__dirname, './src/public/main'),
-        ],
+        modules: [path.resolve(__dirname, './node_modules'), path.resolve(__dirname, './src/public/main')],
     },
 
     entry: path.resolve(__dirname, './src/public/main/main.js'),
@@ -31,7 +28,7 @@ const config = {
         port: 8082,
         contentBase: path.resolve(__dirname, './src/public'),
         public: 'localhost:8082',
-        before: (app) => {
+        before: app => {
             configServer.exposeApiParams(app, configServer.params);
         },
         historyApiFallback: true,
@@ -40,12 +37,7 @@ const config = {
     devtool: 'cheap-module-inline-source-map',
 
     module: {
-        rules: [
-            webpackRules.babelLoaderRule,
-            webpackRules.eslintLoaderRule,
-            webpackRules.cssLoaderRule,
-            webpackRules.fileLoaderRule,
-        ],
+        rules: [webpackRules.babelLoaderRule, webpackRules.cssLoaderRule, webpackRules.fileLoaderRule],
     },
 };
 

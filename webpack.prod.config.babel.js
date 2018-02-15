@@ -13,10 +13,7 @@ const config = {
             constants: path.resolve(__dirname, './src/public/main/constants'),
         },
         extensions: ['.js'],
-        modules: [
-            path.resolve(__dirname, './node_modules'),
-            path.resolve(__dirname, './src/public/main'),
-        ],
+        modules: [path.resolve(__dirname, './node_modules'), path.resolve(__dirname, './src/public/main')],
     },
 
     entry: path.resolve(__dirname, './src/public/main/main.js'),
@@ -50,14 +47,8 @@ const config = {
     ],
 
     module: {
-        rules: [
-            webpackRules.babelLoaderRule,
-            webpackRules.eslintLoaderRule,
-            webpackRules.cssLoaderRule,
-            webpackRules.fileLoaderRule,
-        ],
+        rules: [webpackRules.babelLoaderRule, webpackRules.cssLoaderRule, webpackRules.fileLoaderRule],
     },
-
 };
 
 export default config;

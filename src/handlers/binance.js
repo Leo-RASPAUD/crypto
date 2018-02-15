@@ -28,7 +28,6 @@ const getData = async () => {
 };
 
 const getAccountInfo = async ({ credentials }) => {
-    console.log('Getting Binance account informations...');
     const clientBinance = binance.default({ apiKey: credentials.apiKey, apiSecret: credentials.apiSecret });
     const prices = await clientBinance.prices();
     const symbolKeys = Object.keys(prices);
@@ -36,12 +35,14 @@ const getAccountInfo = async ({ credentials }) => {
     const promises = [];
     try {
         accountInfo = await clientBinance.accountInfo();
-        accountInfo.balances.filter(item => (item.free > 0.001 || item.locked > 0.001)).map((balanceItem) => {
+        accountInfo.balances.filter(item => item.free > 0.001 || item.locked > 0.001).map(balanceItem => {
             let symbol;
             if (symbolKeys.includes(`${balanceItem.asset}ETH`)) {
                 symbol = `${balanceItem.asset}ETH`;
             } else {
-                symbol = symbolKeys.includes(`${balanceItem.asset}USDT`) ? `${balanceItem.asset}USDT` : `ETH${balanceItem.asset}`;
+                symbol = symbolKeys.includes(`${balanceItem.asset}USDT`)
+                    ? `${balanceItem.asset}USDT`
+                    : symbolKeys.includes(`${balanceItem.asset}BTC`) ? `${balanceItem.asset}BTC` : `ETH${balanceItem.asset}`;
             }
             return promises.push(clientBinance.allOrders({ symbol }));
         });
@@ -60,7 +61,6 @@ const getAccountInfo = async ({ credentials }) => {
         return Promise.reject(error);
     }
 };
-
 
 module.exports = {
     getData,
