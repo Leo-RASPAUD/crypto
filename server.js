@@ -15,35 +15,36 @@ const userEndpoints = require('./src/data/user');
 const exchangesEndpoints = require('./src/data/exchanges');
 const conf = require('./conf/conf');
 const exchangesHandler = require('./src/handlers/exchanges');
+const priceHandler = require('./src/handlers/price');
 
 const app = express();
-
 
 mongoose.connect(`${conf.params.db_type}://${conf.params.mongoHost}:${conf.params.db_port}/${conf.params.db_name}`);
 const MongooseStore = mongoSession(session.Store);
 const mongoStore = new MongooseStore({ connection: mongoose });
 mongoose.Promise = global.Promise;
 
-app.use(cors({
-    origin: [
-        'http://localhost:8082',
-        `http://${conf.params.host}`,
-    ],
-    credentials: true,
-}));
+app.use(
+    cors({
+        origin: ['http://localhost:8082', `http://${conf.params.host}`],
+        credentials: true,
+    }),
+);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: '50mb' }));
 
 app.use(cookieParser(conf.authentication.sessionSecret));
-app.use(session({
-    secret: conf.authentication.sessionSecret,
-    resave: true,
-    saveUninitialized: false,
-    store: mongoStore,
-    cookie: { domain: `${conf.params.host}` },
-    key: 'sessionId',
-}));
+app.use(
+    session({
+        secret: conf.authentication.sessionSecret,
+        resave: true,
+        saveUninitialized: false,
+        store: mongoStore,
+        cookie: { domain: `${conf.params.host}` },
+        key: 'sessionId',
+    }),
+);
 
 // Passport
 passport.use(localStrategy);
@@ -51,10 +52,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(compression());
 
-
 // Cert
 app.get('/health-check', (req, res) => res.sendStatus(200));
-
 
 // Endpoints
 app.post('/login', userEndpoints.login);
@@ -90,7 +89,6 @@ app.get('/', (_, res) => {
     res.sendFile(indexPath);
 });
 
-
 app.get('*', (req, res) => {
     const file = req.path.split('/');
     if (req.originalUrl.match(/.*favicon.*png$/)) {
@@ -106,5 +104,8 @@ app.listen(conf.params.port, async () => {
     setInterval(() => {
         exchangesHandler.getData();
     }, 60000);
+    setInterval(() => {
+        priceHandler.cleanDb();
+    }, 60 * 1000 * 60 * 24);
     console.log(`Backend runing on port : ${conf.params.port}`);
 });
