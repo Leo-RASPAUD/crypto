@@ -16,8 +16,8 @@ import mainReducer from 'reducers/mainReducer';
 import 'assets/loader.css';
 import 'assets/materialIcons.css';
 import 'assets/cryptoIcons.css';
+import 'assets/preview.png';
 import settings from './utils/settings';
-
 
 settings.initEnvironmentVariables().then(() => {
     const history = createHistory();
@@ -29,10 +29,7 @@ settings.initEnvironmentVariables().then(() => {
         ...(window.DEBUG_REACT ? [window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION__()] : {}),
     ];
 
-    const store = createStore(
-        mainReducer,
-        compose(...composeFunctions),
-    );
+    const store = createStore(mainReducer, compose(...composeFunctions));
 
     const theme = createMuiTheme({
         palette: {
@@ -45,7 +42,7 @@ settings.initEnvironmentVariables().then(() => {
             alternateTextColor: 'white',
         },
         typography: {
-            fontFamily: '\'Nunito\', sans-serif',
+            fontFamily: "'Nunito', sans-serif",
         },
     });
 
