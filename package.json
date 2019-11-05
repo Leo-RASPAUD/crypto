@@ -39,7 +39,7 @@
     "jsonwebtoken": "^8.1.0",
     "kucoin-api": "^0.0.3",
     "material-ui": "^1.0.0-beta.29",
-    "mongoose": "^5.0.0-rc2",
+    "mongoose": "^5.7.5",
     "mongoose-express-session": "^0.0.5",
     "nodemon": "^1.14.11",
     "passport": "^0.4.0",
