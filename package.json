@@ -20,7 +20,7 @@
     ]
   },
   "dependencies": {
-    "axios": "^0.17.1",
+    "axios": "^0.21.1",
     "babel-runtime": "^6.26.0",
     "bcrypt-nodejs": "^0.0.3",
     "binance-api-node": "^0.5.5",
