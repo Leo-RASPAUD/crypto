@@ -33,7 +33,7 @@
     "css-loader": "^0.28.8",
     "email-validator": "^1.1.1",
     "eslint-import-resolver-webpack": "^0.8.4",
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "express-session": "^1.15.6",
     "file-loader": "^1.1.6",
     "jsonwebtoken": "^8.1.0",
